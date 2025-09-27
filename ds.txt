@@ -3,7 +3,3270 @@
 При построении приложения мы используем лучшие практики и современные тенденции, архитектуру FSD, подходы NEXT 15, лучший DX, не используем any.
 В нашем шаблоне реализованы аутентификация, глобальная обработка ошибок и подходы к построению бизнес логики.
 Сейчас наше шаблонное приложение не доделано. Проанализируй на следование заявленным выше принципам, и исправь ошибки и недоработки.
+Приведи ВЕСЬ код приложения к эталонному.
 При доработке сосредоточься на практически используемых и реально необходимых вопросах и критических проблемах.
 Из нового можешь добавлять только действительно необходимое, которое наверняка придется реализовывать к каждом реальном приложении. 
 Проанализируй реализованную систему глобальной обработка ошибок, она должна быть системной, продуманной, лаконичной и надежной, отвечать лучшим практикам.
 Так же проанализируй на наличие "мертвого" легаси кода, удали на ненужные "мусорные" комментарии, оставляй комментарии только по лучшим практикам, действительно необходимые.
+
+<source type="github_repository"><commit>e24740cf06985e970d3a834012f75c9ba3c7b798</commit>
+<file name="README.md">This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+## Getting Started
+
+First, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&amp;filter=next.js&amp;utm_source=create-next-app&amp;utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+</file>
+<file name="ds.txt">Мы делаем эталонный стартовый шаблон, для создания на его основе профессиональных Production Ready приложений, путем адаптации бизнес логики.
+Из бизнес логики у нас сейчас profile и dashboard, они будут адаптироваться в реальных приложениях на конкретную бизнес логику.
+При построении приложения мы используем лучшие практики и современные тенденции, архитектуру FSD, подходы NEXT 15, лучший DX, не используем any.
+В нашем шаблоне реализованы аутентификация, глобальная обработка ошибок и подходы к построению бизнес логики.
+Сейчас наше шаблонное приложение не доделано. Проанализируй на следование заявленным выше принципам, и исправь ошибки и недоработки.
+При доработке сосредоточься на практически используемых и реально необходимых вопросах и критических проблемах.
+Из нового можешь добавлять только действительно необходимое, которое наверняка придется реализовывать к каждом реальном приложении. 
+Проанализируй реализованную систему глобальной обработка ошибок, она должна быть системной, продуманной, лаконичной и надежной, отвечать лучшим практикам.
+Так же проанализируй на наличие "мертвого" легаси кода, удали на ненужные "мусорные" комментарии, оставляй комментарии только по лучшим практикам, действительно необходимые.</file>
+<file name="eslint.config.mjs">import { dirname } from "path";
+import { fileURLToPath } from "url";
+import { FlatCompat } from "@eslint/eslintrc";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+});
+
+const eslintConfig = [
+  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    rules: {
+      "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/no-unused-vars": "error",
+      "prefer-const": "error",
+      "no-var": "error",
+    },
+  },
+  {
+    ignores: [
+      "node_modules/**",
+      ".next/**",
+      "out/**",
+      "build/**",
+      "next-env.d.ts",
+    ],
+  },
+];
+
+export default eslintConfig;
+</file>
+<file name="next.config.ts">import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  /* config options here */
+};
+
+export default nextConfig;
+</file>
+<file name="package.json">{
+  "name": "starter-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.90.2",
+    "@tanstack/react-query-devtools": "^5.90.2",
+    "@tanstack/react-query-next-experimental": "^5.90.2",
+    "bcryptjs": "^3.0.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "jose": "^6.1.0",
+    "lucide-react": "^0.544.0",
+    "next": "15.5.4",
+    "next-themes": "^0.4.6",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "tailwind-merge": "^3.3.1",
+    "zod": "^4.1.11",
+    "zustand": "^5.0.8"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.4",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
+</file>
+<file name="postcss.config.mjs">const config = {
+  plugins: ["@tailwindcss/postcss"],
+};
+
+export default config;
+</file>
+<file name="tsconfig.json">{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}
+</file>
+<file name="src/app/globals.css">@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+.animate-accordion-down {
+  animation: accordion-down 0.2s ease-out;
+}
+
+.animate-accordion-up {
+  animation: accordion-up 0.2s ease-out;
+}
+</file>
+<file name="src/app/layout.tsx">// src/app/layout.tsx
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
+import { Providers } from '@/shared/lib/providers'
+
+const inter = Inter({ subsets: ['latin'] })
+
+export const metadata: Metadata = {
+  title: 'FSD Next.js App',
+  description: 'Professional template with FSD architecture',
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    &lt;html lang="en" suppressHydrationWarning&gt;
+      &lt;body className={inter.className}&gt;
+        &lt;Providers&gt;
+          {children}
+        &lt;/Providers&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+  )
+}</file>
+<file name="src/app/page.tsx">import Image from "next/image";
+
+export default function Home() {
+  return (
+    &lt;div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20"&gt;
+      &lt;main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start"&gt;
+        &lt;Image
+          className="dark:invert"
+          src="/next.svg"
+          alt="Next.js logo"
+          width={180}
+          height={38}
+          priority
+        /&gt;
+        &lt;ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left"&gt;
+          &lt;li className="mb-2 tracking-[-.01em]"&gt;
+            Get started by editing{" "}
+            &lt;code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded"&gt;
+              src/app/page.tsx
+            &lt;/code&gt;
+            .
+          &lt;/li&gt;
+          &lt;li className="tracking-[-.01em]"&gt;
+            Save and see your changes instantly.
+          &lt;/li&gt;
+        &lt;/ol&gt;
+
+        &lt;div className="flex gap-4 items-center flex-col sm:flex-row"&gt;
+          &lt;a
+            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
+            href="https://vercel.com/new?utm_source=create-next-app&amp;utm_medium=appdir-template-tw&amp;utm_campaign=create-next-app"
+            target="_blank"
+            rel="noopener noreferrer"
+          &gt;
+            &lt;Image
+              className="dark:invert"
+              src="/vercel.svg"
+              alt="Vercel logomark"
+              width={20}
+              height={20}
+            /&gt;
+            Deploy now
+          &lt;/a&gt;
+          &lt;a
+            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
+            href="https://nextjs.org/docs?utm_source=create-next-app&amp;utm_medium=appdir-template-tw&amp;utm_campaign=create-next-app"
+            target="_blank"
+            rel="noopener noreferrer"
+          &gt;
+            Read our docs
+          &lt;/a&gt;
+        &lt;/div&gt;
+      &lt;/main&gt;
+      &lt;footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center"&gt;
+        &lt;a
+          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+          href="https://nextjs.org/learn?utm_source=create-next-app&amp;utm_medium=appdir-template-tw&amp;utm_campaign=create-next-app"
+          target="_blank"
+          rel="noopener noreferrer"
+        &gt;
+          &lt;Image
+            aria-hidden
+            src="/file.svg"
+            alt="File icon"
+            width={16}
+            height={16}
+          /&gt;
+          Learn
+        &lt;/a&gt;
+        &lt;a
+          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+          href="https://vercel.com/templates?framework=next.js&amp;utm_source=create-next-app&amp;utm_medium=appdir-template-tw&amp;utm_campaign=create-next-app"
+          target="_blank"
+          rel="noopener noreferrer"
+        &gt;
+          &lt;Image
+            aria-hidden
+            src="/window.svg"
+            alt="Window icon"
+            width={16}
+            height={16}
+          /&gt;
+          Examples
+        &lt;/a&gt;
+        &lt;a
+          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+          href="https://nextjs.org?utm_source=create-next-app&amp;utm_medium=appdir-template-tw&amp;utm_campaign=create-next-app"
+          target="_blank"
+          rel="noopener noreferrer"
+        &gt;
+          &lt;Image
+            aria-hidden
+            src="/globe.svg"
+            alt="Globe icon"
+            width={16}
+            height={16}
+          /&gt;
+          Go to nextjs.org →
+        &lt;/a&gt;
+      &lt;/footer&gt;
+    &lt;/div&gt;
+  );
+}
+</file>
+<file name="src/app/(auth)/layout.tsx">import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Authentication',
+  description: 'Login or register to your account',
+}
+
+export default function AuthLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    &lt;div className="min-h-screen bg-gradient-to-br from-background to-muted/20"&gt;
+      {children}
+    &lt;/div&gt;
+  )
+}</file>
+<file name="src/app/(auth)/login/page.tsx">'use client'
+
+import { LoginForm } from '@/features/auth/ui/login-form'
+import { useUser } from '@/entities/session/model/session.store'
+import { redirect } from 'next/navigation'
+import { useEffect } from 'react'
+
+export default function LoginPage() {
+  const user = useUser()
+
+  useEffect(() =&gt; {
+    if (user) {
+      redirect('/dashboard')
+    }
+  }, [user])
+
+  return (
+    &lt;div className="min-h-screen flex items-center justify-center bg-background"&gt;
+      &lt;div className="max-w-md w-full space-y-8 p-6"&gt;
+        &lt;div className="text-center"&gt;
+          &lt;h1 className="text-3xl font-bold"&gt;Sign in to your account&lt;/h1&gt;
+          &lt;p className="text-muted-foreground mt-2"&gt;
+            Enter your credentials to access your account
+          &lt;/p&gt;
+        &lt;/div&gt;
+        &lt;LoginForm /&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  )
+}</file>
+<file name="src/app/(auth)/register/page.tsx">'use client'
+
+import { RegisterForm } from '@/features/auth/ui/register-form'
+import { useUser } from '@/entities/session/model/session.store'
+import { redirect } from 'next/navigation'
+import { useEffect } from 'react'
+import Link from 'next/link'
+
+export default function RegisterPage() {
+  const user = useUser()
+
+  useEffect(() =&gt; {
+    if (user) {
+      redirect('/dashboard')
+    }
+  }, [user])
+
+  return (
+    &lt;div className="min-h-screen flex items-center justify-center bg-background"&gt;
+      &lt;div className="max-w-md w-full space-y-8 p-6"&gt;
+        &lt;div className="text-center"&gt;
+          &lt;h1 className="text-3xl font-bold"&gt;Create your account&lt;/h1&gt;
+          &lt;p className="text-muted-foreground mt-2"&gt;
+            Enter your details to get started
+          &lt;/p&gt;
+        &lt;/div&gt;
+        
+        &lt;RegisterForm /&gt;
+        
+        &lt;div className="text-center text-sm text-muted-foreground"&gt;
+          Already have an account?{' '}
+          &lt;Link 
+            href="/login" 
+            className="text-primary hover:underline font-medium"
+          &gt;
+            Sign in
+          &lt;/Link&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  )
+}</file>
+<file name="src/app/(protected)/layout.tsx">'use client'
+
+import { RequireAuth } from '@/features/auth/lib/require-auth'
+import { AppSidebar } from '@/widgets/sidebar/ui/sidebar'
+import { AppHeader } from '@/widgets/header/ui/header'
+import { useState } from 'react'
+
+interface ProtectedLayoutProps {
+  children: React.ReactNode
+}
+
+export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  return (
+    &lt;RequireAuth&gt;
+      &lt;div className="flex h-screen bg-background"&gt;
+        {/* Sidebar */}
+        &lt;AppSidebar open={sidebarOpen} onOpenChange={setSidebarOpen} /&gt;
+        
+        {/* Main content */}
+        &lt;div className="flex-1 flex flex-col min-w-0"&gt;
+          &lt;AppHeader onMenuClick={() =&gt; setSidebarOpen(true)} /&gt;
+          
+          &lt;main className="flex-1 overflow-y-auto p-4 md:p-6"&gt;
+            &lt;div className="max-w-7xl mx-auto w-full"&gt;
+              {children}
+            &lt;/div&gt;
+          &lt;/main&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/RequireAuth&gt;
+  )
+}</file>
+<file name="src/app/(protected)/dashboard/page.tsx">// src/app/(protected)/dashboard/page.tsx
+import { RequireAuth } from '@/features/auth/lib/require-auth'
+import { DashboardStats } from '@/widgets/dashboard-stats/ui/dashboard-stats'
+
+// Серверный компонент для данных
+async function DashboardData() {
+  // Здесь можно делать серверные запросы
+  return &lt;DashboardStats /&gt;
+}
+
+export default function DashboardPage() {
+  return (
+    &lt;RequireAuth&gt;
+      &lt;div className="p-6 space-y-6"&gt;
+        &lt;div&gt;
+          &lt;h1 className="text-3xl font-bold"&gt;Dashboard&lt;/h1&gt;
+          &lt;p className="text-muted-foreground"&gt;
+            Welcome back!
+          &lt;/p&gt;
+        &lt;/div&gt;
+        &lt;DashboardData /&gt;
+      &lt;/div&gt;
+    &lt;/RequireAuth&gt;
+  )
+}</file>
+<file name="src/app/(protected)/profile/page.tsx">'use client'
+
+import { useState } from 'react'
+import { RequireAuth } from '@/features/auth/lib/require-auth'
+import { ProfileForm } from '@/features/profile-management/ui/profile-form'
+import { PasswordForm } from '@/features/profile-management/ui/password-form'
+import { AccountInfo } from '@/features/profile-management/ui/account-info'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs'
+
+export default function ProfilePage() {
+  const [activeTab, setActiveTab] = useState('profile')
+
+  return (
+    &lt;RequireAuth&gt;
+      &lt;div className="container mx-auto py-8 space-y-8"&gt;
+        &lt;div className="space-y-2"&gt;
+          &lt;h1 className="text-3xl font-bold tracking-tight"&gt;Profile Settings&lt;/h1&gt;
+          &lt;p className="text-muted-foreground"&gt;
+            Manage your account settings and preferences
+          &lt;/p&gt;
+        &lt;/div&gt;
+
+        &lt;Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8"&gt;
+          &lt;TabsList className="grid w-full grid-cols-3 lg:max-w-md"&gt;
+            &lt;TabsTrigger value="profile"&gt;Profile&lt;/TabsTrigger&gt;
+            &lt;TabsTrigger value="password"&gt;Password&lt;/TabsTrigger&gt;
+            &lt;TabsTrigger value="account"&gt;Account&lt;/TabsTrigger&gt;
+          &lt;/TabsList&gt;
+
+          &lt;TabsContent value="profile"&gt;
+            &lt;Card&gt;
+              &lt;CardHeader&gt;
+                &lt;CardTitle&gt;Profile Information&lt;/CardTitle&gt;
+                &lt;CardDescription&gt;
+                  Update your personal information and how others see you
+                &lt;/CardDescription&gt;
+              &lt;/CardHeader&gt;
+              &lt;CardContent className="space-y-4"&gt;
+                &lt;ProfileForm /&gt;
+              &lt;/CardContent&gt;
+            &lt;/Card&gt;
+          &lt;/TabsContent&gt;
+
+          &lt;TabsContent value="password"&gt;
+            &lt;Card&gt;
+              &lt;CardHeader&gt;
+                &lt;CardTitle&gt;Change Password&lt;/CardTitle&gt;
+                &lt;CardDescription&gt;
+                  Ensure your account is secure with a strong password
+                &lt;/CardDescription&gt;
+              &lt;/CardHeader&gt;
+              &lt;CardContent className="space-y-4"&gt;
+                &lt;PasswordForm /&gt;
+              &lt;/CardContent&gt;
+            &lt;/Card&gt;
+          &lt;/TabsContent&gt;
+
+          &lt;TabsContent value="account"&gt;
+            &lt;Card&gt;
+              &lt;CardHeader&gt;
+                &lt;CardTitle&gt;Account Information&lt;/CardTitle&gt;
+                &lt;CardDescription&gt;
+                  Overview of your account details and membership
+                &lt;/CardDescription&gt;
+              &lt;/CardHeader&gt;
+              &lt;CardContent&gt;
+                &lt;AccountInfo /&gt;
+              &lt;/CardContent&gt;
+            &lt;/Card&gt;
+          &lt;/TabsContent&gt;
+        &lt;/Tabs&gt;
+      &lt;/div&gt;
+    &lt;/RequireAuth&gt;
+  )
+}</file>
+<file name="src/entities/session/model/session.store.ts">import { create } from "zustand";
+import { devtools } from "zustand/middleware";
+import { User } from "@/entities/user/model/types";
+import { authApi } from "@/shared/api/endpoints/auth";
+import { AppError, toAppError } from "@/shared/lib/errors"; // Импортируем наши типы ошибок
+
+interface SessionState {
+  user: User | null;
+  isLoading: boolean;
+  error: AppError | null; // Меняем тип на AppError | null
+  login: (email: string, password: string) =&gt; Promise&lt;void&gt;;
+  logout: () =&gt; Promise&lt;void&gt;;
+  register: (email: string, password: string, name: string) =&gt; Promise&lt;void&gt;;
+  checkAuth: () =&gt; Promise&lt;void&gt;;
+  clearError: () =&gt; void;
+  updateUser: (userData: Partial&lt;User&gt;) =&gt; void;
+}
+
+export const useSessionStore = create&lt;SessionState&gt;()(
+  devtools(
+    (set) =&gt; ({
+      user: null,
+      isLoading: true,
+      error: null, // Начальное значение теперь совместимо с типом
+
+      login: async (email: string, password: string) =&gt; {
+        set({ isLoading: true, error: null });
+
+        try {
+          const userData = await authApi.login({ email, password });
+          set({ user: userData, isLoading: false, error: null });
+        } catch (error) {
+          const appError = toAppError(error); // Конвертируем в AppError
+          set({ isLoading: false, error: appError }); // Теперь тип совпадает
+          throw appError;
+        }
+      },
+
+      // Аналогичные исправления для register и checkAuth
+      register: async (email: string, password: string, name: string) =&gt; {
+        set({ isLoading: true, error: null });
+
+        try {
+          const userData = await authApi.register({ email, password, name });
+          set({ user: userData, isLoading: false, error: null });
+        } catch (error) {
+          const appError = toAppError(error);
+          set({ isLoading: false, error: appError });
+          throw appError;
+        }
+      },
+
+      checkAuth: async () =&gt; {
+        try {
+          const userData = await authApi.getMe();
+          set({ user: userData, isLoading: false, error: null });
+        } catch (error) {
+          const appError = toAppError(error);
+          set({ user: null, isLoading: false, error: appError });
+        }
+      },
+
+      logout: async () =&gt; {
+        try {
+          await authApi.logout();
+        } finally {
+          set({ user: null, isLoading: false, error: null });
+        }
+      },
+
+      clearError: () =&gt; set({ error: null }),
+
+      updateUser: (userData) =&gt;
+        set((state) =&gt; ({
+          user: state.user ? { ...state.user, ...userData } : null,
+        })),
+    }),
+    {
+      name: "session-store",
+    }
+  )
+);
+
+export const useUser = () =&gt; useSessionStore((state) =&gt; state.user);
+export const useAuthLoading = () =&gt; useSessionStore((state) =&gt; state.isLoading);
+export const useAuthError = () =&gt; useSessionStore((state) =&gt; state.error);
+export const useAuthActions = () =&gt;
+  useSessionStore((state) =&gt; ({
+    login: state.login,
+    logout: state.logout,
+    register: state.register,
+    checkAuth: state.checkAuth,
+    clearError: state.clearError,
+  }));
+</file>
+<file name="src/entities/user/model/types.ts">export interface User {
+  id: string
+  email: string
+  name: string
+  avatar?: string
+  role: 'user' | 'admin'
+  createdAt: string
+  updatedAt: string
+}
+
+export interface UserProfile {
+  name: string
+  email: string
+  avatar?: string
+}</file>
+<file name="src/features/auth/lib/require-auth.tsx">'use client'
+
+import { useAuthLoading, useUser } from '@/entities/session/model/session.store'
+import { redirect } from 'next/navigation'
+import { useEffect } from 'react'
+
+interface RequireAuthProps {
+  children: React.ReactNode
+  fallback?: React.ReactNode
+}
+
+export function RequireAuth({ children, fallback }: RequireAuthProps) {
+  const user = useUser()
+  const isLoading = useAuthLoading()
+
+  useEffect(() =&gt; {
+    if (!isLoading &amp;&amp; !user) {
+      redirect('/login')
+    }
+  }, [user, isLoading])
+
+  if (isLoading) {
+    return fallback || &lt;div&gt;Loading...&lt;/div&gt;
+  }
+
+  if (!user) {
+    return null
+  }
+
+  return &lt;&gt;{children}&lt;/&gt;
+}</file>
+<file name="src/features/auth/ui/login-form.tsx">// src/features/auth/ui/login-form.tsx
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { Button } from '@/shared/ui/button'
+import { Input } from '@/shared/ui/input'
+import { useAuthActions, useAuthError, useAuthLoading } from '@/entities/session/model/session.store'
+
+export function LoginForm() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  
+  const { login } = useAuthActions()
+  const error = useAuthError()
+  const isLoading = useAuthLoading()
+  const router = useRouter()
+
+  const handleSubmit = async (e: React.FormEvent) =&gt; {
+    e.preventDefault()
+    
+    try {
+      await login(email, password)
+      router.push('/dashboard')
+    } catch {
+      // Error handled by store - we don't need to use the error variable here
+      // since it's already available via useAuthError()
+    }
+  }
+
+  return (
+    &lt;form onSubmit={handleSubmit} className="space-y-4"&gt;
+      {error &amp;&amp; (
+        &lt;div className="bg-destructive/15 text-destructive text-sm p-3 rounded-md"&gt;
+          {/* Используем userMessage для пользовательского сообщения */}
+          {error.userMessage || error.message}
+        &lt;/div&gt;
+      )}
+      
+      &lt;div className="space-y-2"&gt;
+        &lt;Input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) =&gt; setEmail(e.target.value)}
+          required
+          disabled={isLoading}
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;div className="space-y-2"&gt;
+        &lt;Input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) =&gt; setPassword(e.target.value)}
+          required
+          disabled={isLoading}
+        /&gt;
+      &lt;/div&gt;
+      
+      &lt;Button type="submit" className="w-full" disabled={isLoading}&gt;
+        {isLoading ? 'Signing in...' : 'Sign in'}
+      &lt;/Button&gt;
+    &lt;/form&gt;
+  )
+}</file>
+<file name="src/features/auth/ui/register-form.tsx">'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { Button } from '@/shared/ui/button'
+import { Input } from '@/shared/ui/input'
+import { useAuthActions, useAuthError, useAuthLoading } from '@/entities/session/model/session.store'
+import { emailValidator, passwordValidator } from '@/shared/lib/utils'
+
+
+export function RegisterForm() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  })
+  const [validationErrors, setValidationErrors] = useState&lt;Record&lt;string, string&gt;&gt;({})
+  
+  const { register } = useAuthActions()
+  const error = useAuthError()
+  const isLoading = useAuthLoading()
+  const router = useRouter()
+
+  const validateForm = () =&gt; {
+    const errors: Record&lt;string, string&gt; = {}
+
+    if (!formData.name.trim()) {
+      errors.name = 'Name is required'
+    } else if (formData.name.trim().length &lt; 2) {
+      errors.name = 'Name must be at least 2 characters'
+    }
+
+    if (!formData.email.trim()) {
+      errors.email = 'Email is required'
+    } else if (!emailValidator(formData.email)) {
+      errors.email = 'Please enter a valid email address'
+    }
+
+    if (!formData.password) {
+      errors.password = 'Password is required'
+    } else if (!passwordValidator(formData.password)) {
+      errors.password = 'Password must be at least 6 characters'
+    }
+
+    if (!formData.confirmPassword) {
+      errors.confirmPassword = 'Please confirm your password'
+    } else if (formData.password !== formData.confirmPassword) {
+      errors.confirmPassword = 'Passwords do not match'
+    }
+
+    setValidationErrors(errors)
+    return Object.keys(errors).length === 0
+  }
+
+  const handleChange = (e: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; {
+    const { name, value } = e.target
+    setFormData(prev =&gt; ({ ...prev, [name]: value }))
+    
+    // Clear validation error when user starts typing
+    if (validationErrors[name]) {
+      setValidationErrors(prev =&gt; ({ ...prev, [name]: '' }))
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) =&gt; {
+    e.preventDefault()
+    
+    if (!validateForm()) {
+      return
+    }
+
+    try {
+      await register(formData.email, formData.password, formData.name)
+      router.push('/dashboard')
+    } catch  {
+      // Error handled by store
+    }
+  }
+
+  const getFieldError = (fieldName: string) =&gt; 
+    validationErrors[fieldName] || (error?.field === fieldName ? error.message : '')
+
+  return (
+    &lt;form onSubmit={handleSubmit} className="space-y-4"&gt;
+      {error &amp;&amp; !error.field &amp;&amp; (
+        &lt;div className="bg-destructive/15 text-destructive text-sm p-3 rounded-md"&gt;
+          {error.userMessage || error.message}
+        &lt;/div&gt;
+      )}
+      
+      &lt;div className="space-y-2"&gt;
+        &lt;label htmlFor="name" className="text-sm font-medium"&gt;
+          Full Name
+        &lt;/label&gt;
+        &lt;Input
+          id="name"
+          name="name"
+          type="text"
+          placeholder="Enter your full name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+          disabled={isLoading}
+          className={getFieldError('name') ? 'border-destructive' : ''}
+        /&gt;
+        {getFieldError('name') &amp;&amp; (
+          &lt;p className="text-destructive text-xs"&gt;{getFieldError('name')}&lt;/p&gt;
+        )}
+      &lt;/div&gt;
+      
+      &lt;div className="space-y-2"&gt;
+        &lt;label htmlFor="email" className="text-sm font-medium"&gt;
+          Email Address
+        &lt;/label&gt;
+        &lt;Input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="Enter your email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+          disabled={isLoading}
+          className={getFieldError('email') ? 'border-destructive' : ''}
+        /&gt;
+        {getFieldError('email') &amp;&amp; (
+          &lt;p className="text-destructive text-xs"&gt;{getFieldError('email')}&lt;/p&gt;
+        )}
+      &lt;/div&gt;
+      
+      &lt;div className="space-y-2"&gt;
+        &lt;label htmlFor="password" className="text-sm font-medium"&gt;
+          Password
+        &lt;/label&gt;
+        &lt;Input
+          id="password"
+          name="password"
+          type="password"
+          placeholder="Create a password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+          disabled={isLoading}
+          className={getFieldError('password') ? 'border-destructive' : ''}
+        /&gt;
+        {getFieldError('password') &amp;&amp; (
+          &lt;p className="text-destructive text-xs"&gt;{getFieldError('password')}&lt;/p&gt;
+        )}
+      &lt;/div&gt;
+      
+      &lt;div className="space-y-2"&gt;
+        &lt;label htmlFor="confirmPassword" className="text-sm font-medium"&gt;
+          Confirm Password
+        &lt;/label&gt;
+        &lt;Input
+          id="confirmPassword"
+          name="confirmPassword"
+          type="password"
+          placeholder="Confirm your password"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          required
+          disabled={isLoading}
+          className={getFieldError('confirmPassword') ? 'border-destructive' : ''}
+        /&gt;
+        {getFieldError('confirmPassword') &amp;&amp; (
+          &lt;p className="text-destructive text-xs"&gt;{getFieldError('confirmPassword')}&lt;/p&gt;
+        )}
+      &lt;/div&gt;
+      
+      &lt;Button type="submit" className="w-full" disabled={isLoading}&gt;
+        {isLoading ? 'Creating account...' : 'Create account'}
+      &lt;/Button&gt;
+    &lt;/form&gt;
+  )
+}</file>
+<file name="src/features/profile-management/model/use-profile-actions.ts">// src/features/profile-management/model/use-profile-actions.ts
+import { useState } from 'react'
+import { useSessionStore } from '@/entities/session/model/session.store' // Исправить импорт
+import { apiClient } from '@/shared/api/client'
+import { AppError, toAppError } from '@/shared/lib/errors'
+import { User } from '@/entities/user/model/types' // Добавить импорт
+
+interface UpdateProfileData {
+  name: string
+  email: string
+}
+
+export function useProfileActions() {
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState&lt;AppError | null&gt;(null)
+  
+  // Использовать правильное хранилище
+  const user = useSessionStore(state =&gt; state.user)
+  const updateUser = useSessionStore(state =&gt; state.updateUser)
+
+  const updateProfile = async (data: UpdateProfileData) =&gt; {
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      // Добавить типизацию
+      const updatedUser = await apiClient.put&lt;User&gt;(`/users/${user?.id}`, data)
+      updateUser(updatedUser)
+      return updatedUser
+    } catch (error) {
+      const appError = toAppError(error)
+      setError(appError)
+      throw appError
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const changePassword = async (currentPassword: string, newPassword: string) =&gt; {
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      // Типизировать ответ если нужно
+      await apiClient.post&lt;{ success: boolean }&gt;('/auth/change-password', {
+        currentPassword,
+        newPassword
+      })
+    } catch (error) {
+      const appError = toAppError(error)
+      setError(appError)
+      throw appError
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  return {
+    updateProfile,
+    changePassword,
+    isLoading,
+    error,
+  }
+}</file>
+<file name="src/features/profile-management/ui/account-info.tsx">"use client";
+
+import {
+  useAuthActions,
+  useUser,
+} from "@/entities/session/model/session.store";
+import { Button } from "@/shared/ui/button";
+import { Badge } from "@/shared/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/shared/ui/card";
+
+export function AccountInfo() {
+  const user = useUser();
+  const { logout } = useAuthActions();
+
+  if (!user) return null;
+
+  const formatDate = (dateString: string) =&gt; {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  return (
+    &lt;div className="space-y-6"&gt;
+      &lt;Card&gt;
+        &lt;CardHeader&gt;
+          &lt;CardTitle&gt;Account Details&lt;/CardTitle&gt;
+          &lt;CardDescription&gt;
+            Your account information and membership status
+          &lt;/CardDescription&gt;
+        &lt;/CardHeader&gt;
+        &lt;CardContent className="space-y-4"&gt;
+          &lt;div className="grid gap-4 md:grid-cols-2"&gt;
+            &lt;div className="space-y-2"&gt;
+              &lt;label className="text-sm font-medium text-muted-foreground"&gt;
+                User ID
+              &lt;/label&gt;
+              &lt;p className="text-sm font-mono"&gt;{user.id}&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;div className="space-y-2"&gt;
+              &lt;label className="text-sm font-medium text-muted-foreground"&gt;
+                Account Role
+              &lt;/label&gt;
+              &lt;div&gt;
+                &lt;Badge
+                  variant={user.role === "admin" ? "default" : "secondary"}
+                &gt;
+                  {user.role}
+                &lt;/Badge&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div className="space-y-2"&gt;
+              &lt;label className="text-sm font-medium text-muted-foreground"&gt;
+                Member Since
+              &lt;/label&gt;
+              &lt;p className="text-sm"&gt;{formatDate(user.createdAt)}&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;div className="space-y-2"&gt;
+              &lt;label className="text-sm font-medium text-muted-foreground"&gt;
+                Last Updated
+              &lt;/label&gt;
+              &lt;p className="text-sm"&gt;{formatDate(user.updatedAt)}&lt;/p&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/CardContent&gt;
+      &lt;/Card&gt;
+
+      &lt;Card&gt;
+        &lt;CardHeader&gt;
+          &lt;CardTitle className="text-destructive"&gt;Danger Zone&lt;/CardTitle&gt;
+          &lt;CardDescription&gt;
+            Irreversible and destructive actions
+          &lt;/CardDescription&gt;
+        &lt;/CardHeader&gt;
+        &lt;CardContent className="space-y-4"&gt;
+          &lt;div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"&gt;
+            &lt;div className="space-y-1"&gt;
+              &lt;p className="text-sm font-medium"&gt;Sign out of your account&lt;/p&gt;
+              &lt;p className="text-sm text-muted-foreground"&gt;
+                You&amp;apos;ll need to sign in again to access your account
+              &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;Button variant="outline" onClick={logout}&gt;
+              Sign Out
+            &lt;/Button&gt;
+          &lt;/div&gt;
+
+          &lt;div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-4 border-t"&gt;
+            &lt;div className="space-y-1"&gt;
+              &lt;p className="text-sm font-medium text-destructive"&gt;
+                Delete account
+              &lt;/p&gt;
+              &lt;p className="text-sm text-muted-foreground"&gt;
+                Permanently delete your account and all associated data
+              &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;Button variant="destructive" disabled&gt;
+              Delete Account
+            &lt;/Button&gt;
+          &lt;/div&gt;
+        &lt;/CardContent&gt;
+      &lt;/Card&gt;
+    &lt;/div&gt;
+  );
+}
+</file>
+<file name="src/features/profile-management/ui/password-form.tsx">'use client'
+
+import { useState } from 'react'
+import { Button } from '@/shared/ui/button'
+import { Input } from '@/shared/ui/input'
+import { Label } from '@/shared/ui/label'
+import { useProfileActions } from '../model/use-profile-actions'
+
+export function PasswordForm() {
+  const { changePassword, isLoading, error } = useProfileActions()
+  
+  const [formData, setFormData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  })
+  const [successMessage, setSuccessMessage] = useState('')
+  const [validationErrors, setValidationErrors] = useState&lt;Record&lt;string, string&gt;&gt;({})
+
+  const validateForm = () =&gt; {
+    const errors: Record&lt;string, string&gt; = {}
+
+    if (!formData.currentPassword) {
+      errors.currentPassword = 'Current password is required'
+    }
+
+    if (!formData.newPassword) {
+      errors.newPassword = 'New password is required'
+    } else if (formData.newPassword.length &lt; 6) {
+      errors.newPassword = 'Password must be at least 6 characters'
+    }
+
+    if (!formData.confirmPassword) {
+      errors.confirmPassword = 'Please confirm your password'
+    } else if (formData.newPassword !== formData.confirmPassword) {
+      errors.confirmPassword = 'Passwords do not match'
+    }
+
+    setValidationErrors(errors)
+    return Object.keys(errors).length === 0
+  }
+
+  const handleSubmit = async (e: React.FormEvent) =&gt; {
+    e.preventDefault()
+    setSuccessMessage('')
+    setValidationErrors({})
+
+    if (!validateForm()) {
+      return
+    }
+
+    try {
+      await changePassword(formData.currentPassword, formData.newPassword)
+      setSuccessMessage('Password updated successfully!')
+      setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' })
+    } catch  {
+      // Error handled by hook
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; {
+    const { name, value } = e.target
+    setFormData(prev =&gt; ({ ...prev, [name]: value }))
+    
+    if (validationErrors[name]) {
+      setValidationErrors(prev =&gt; ({ ...prev, [name]: '' }))
+    }
+  }
+
+  return (
+    &lt;form onSubmit={handleSubmit} className="space-y-6"&gt;
+      &lt;div className="space-y-4"&gt;
+        &lt;div className="space-y-2"&gt;
+          &lt;Label htmlFor="currentPassword"&gt;Current Password&lt;/Label&gt;
+          &lt;Input
+            id="currentPassword"
+            name="currentPassword"
+            type="password"
+            value={formData.currentPassword}
+            onChange={handleChange}
+            placeholder="Enter current password"
+            disabled={isLoading}
+            className={validationErrors.currentPassword ? 'border-destructive' : ''}
+          /&gt;
+          {validationErrors.currentPassword &amp;&amp; (
+            &lt;p className="text-destructive text-sm"&gt;{validationErrors.currentPassword}&lt;/p&gt;
+          )}
+        &lt;/div&gt;
+
+        &lt;div className="space-y-2"&gt;
+          &lt;Label htmlFor="newPassword"&gt;New Password&lt;/Label&gt;
+          &lt;Input
+            id="newPassword"
+            name="newPassword"
+            type="password"
+            value={formData.newPassword}
+            onChange={handleChange}
+            placeholder="Enter new password"
+            disabled={isLoading}
+            className={validationErrors.newPassword ? 'border-destructive' : ''}
+          /&gt;
+          {validationErrors.newPassword &amp;&amp; (
+            &lt;p className="text-destructive text-sm"&gt;{validationErrors.newPassword}&lt;/p&gt;
+          )}
+        &lt;/div&gt;
+
+        &lt;div className="space-y-2"&gt;
+          &lt;Label htmlFor="confirmPassword"&gt;Confirm New Password&lt;/Label&gt;
+          &lt;Input
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            placeholder="Confirm new password"
+            disabled={isLoading}
+            className={validationErrors.confirmPassword ? 'border-destructive' : ''}
+          /&gt;
+          {validationErrors.confirmPassword &amp;&amp; (
+            &lt;p className="text-destructive text-sm"&gt;{validationErrors.confirmPassword}&lt;/p&gt;
+          )}
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      {error &amp;&amp; (
+        &lt;div className="bg-destructive/15 text-destructive text-sm p-3 rounded-md"&gt;
+          {error.userMessage || error.message}
+        &lt;/div&gt;
+      )}
+
+      {successMessage &amp;&amp; (
+        &lt;div className="bg-green-50 text-green-700 text-sm p-3 rounded-md"&gt;
+          {successMessage}
+        &lt;/div&gt;
+      )}
+
+      &lt;div className="flex justify-end"&gt;
+        &lt;Button type="submit" disabled={isLoading}&gt;
+          {isLoading ? 'Updating...' : 'Change Password'}
+        &lt;/Button&gt;
+      &lt;/div&gt;
+    &lt;/form&gt;
+  )
+}</file>
+<file name="src/features/profile-management/ui/profile-form.tsx">'use client'
+
+import { useState } from 'react'
+import { Button } from '@/shared/ui/button'
+import { Input } from '@/shared/ui/input'
+import { Label } from '@/shared/ui/label'
+
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar'
+import { useProfileActions } from '../model/use-profile-actions'
+import { useUser } from '@/entities/session/model/session.store'
+
+export function ProfileForm() {
+  const user = useUser()
+  const { updateProfile, isLoading, error } = useProfileActions()
+  
+  const [formData, setFormData] = useState({
+    name: user?.name || '',
+    email: user?.email || '',
+  })
+  const [successMessage, setSuccessMessage] = useState('')
+
+  const handleSubmit = async (e: React.FormEvent) =&gt; {
+    e.preventDefault()
+    setSuccessMessage('')
+    
+    try {
+      await updateProfile(formData)
+      setSuccessMessage('Profile updated successfully!')
+    } catch {
+      // Error handled by hook
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; {
+    const { name, value } = e.target
+    setFormData(prev =&gt; ({ ...prev, [name]: value }))
+  }
+
+  const getInitials = (name: string) =&gt; {
+    return name.split(' ').map(n =&gt; n[0]).join('').toUpperCase()
+  }
+
+  return (
+    &lt;form onSubmit={handleSubmit} className="space-y-6"&gt;
+      &lt;div className="flex items-center space-x-6"&gt;
+        &lt;Avatar className="h-20 w-20"&gt;
+          &lt;AvatarImage src={user?.avatar} alt={user?.name || 'Profile avatar'} /&gt;
+          &lt;AvatarFallback className="text-lg"&gt;
+            {getInitials(user?.name || 'U')}
+          &lt;/AvatarFallback&gt;
+        &lt;/Avatar&gt;
+        &lt;div className="space-y-2"&gt;
+          &lt;Label htmlFor="avatar"&gt;Profile Picture&lt;/Label&gt;
+          &lt;Input
+            id="avatar"
+            type="file"
+            accept="image/*"
+            className="max-w-xs"
+            disabled
+          /&gt;
+          &lt;p className="text-sm text-muted-foreground"&gt;
+            Avatar upload functionality coming soon
+          &lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div className="grid gap-4 md:grid-cols-2"&gt;
+        &lt;div className="space-y-2"&gt;
+          &lt;Label htmlFor="name"&gt;Full Name&lt;/Label&gt;
+          &lt;Input
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Enter your full name"
+            disabled={isLoading}
+          /&gt;
+        &lt;/div&gt;
+
+        &lt;div className="space-y-2"&gt;
+          &lt;Label htmlFor="email"&gt;Email Address&lt;/Label&gt;
+          &lt;Input
+            id="email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Enter your email"
+            disabled={isLoading}
+          /&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      {error &amp;&amp; (
+        &lt;div className="bg-destructive/15 text-destructive text-sm p-3 rounded-md"&gt;
+          {error.userMessage || error.message}
+        &lt;/div&gt;
+      )}
+
+      {successMessage &amp;&amp; (
+        &lt;div className="bg-green-50 text-green-700 text-sm p-3 rounded-md"&gt;
+          {successMessage}
+        &lt;/div&gt;
+      )}
+
+      &lt;div className="flex justify-end"&gt;
+        &lt;Button type="submit" disabled={isLoading}&gt;
+          {isLoading ? 'Updating...' : 'Update Profile'}
+        &lt;/Button&gt;
+      &lt;/div&gt;
+    &lt;/form&gt;
+  )
+}</file>
+<file name="src/features/ui/loading-spinner.tsx"></file>
+<file name="src/shared/api/client.ts">// src/shared/api/client.ts
+import {
+  AppError,
+  ApiError,
+  toAppError,
+  isApiError,
+  isTimeoutError,
+  isNetworkError,
+} from "@/shared/lib/errors";
+
+export interface RequestOptions extends Omit&lt;RequestInit, "body"&gt; {
+  body?: unknown;
+  timeout?: number;
+  skipErrorHandling?: boolean;
+  retries?: number;
+}
+
+// Конфигурация клиента по умолчанию
+interface ApiClientConfig {
+  baseURL: string;
+  timeout: number;
+  retries: number;
+  headers: Record&lt;string, string&gt;;
+}
+
+// Интерфейс для стандартизированного ответа об ошибке от API
+interface ApiErrorResponse {
+  message: string;
+  code?: string;
+  userMessage?: string;
+  details?: unknown;
+}
+
+class ApiClient {
+  private config: ApiClientConfig;
+
+  constructor(baseURL: string = "") {
+    this.config = {
+      baseURL,
+      timeout: 10000,
+      retries: 1,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+  }
+
+  public configure(config: Partial&lt;ApiClientConfig&gt;) {
+    this.config = { ...this.config, ...config };
+  }
+
+  private async request&lt;T&gt;(
+    endpoint: string,
+    options: RequestOptions = {},
+    retryCount: number = 0
+  ): Promise&lt;T&gt; {
+    const {
+      timeout = this.config.timeout,
+      body,
+      headers,
+      skipErrorHandling = false,
+      retries = this.config.retries,
+      ...fetchOptions
+    } = options;
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() =&gt; controller.abort(), timeout);
+
+    try {
+      const url = `${this.config.baseURL}${endpoint}`;
+
+      const config: RequestInit = {
+        ...fetchOptions,
+        signal: controller.signal,
+        headers: {
+          ...this.config.headers,
+          ...headers,
+        },
+        credentials: "include",
+      };
+
+      if (body) {
+        config.body = JSON.stringify(body);
+      }
+
+      const response = await fetch(url, config);
+      clearTimeout(timeoutId);
+
+      // Обрабатываем HTTP ошибки
+      if (!response.ok) {
+        let errorData: ApiErrorResponse;
+
+        try {
+          errorData = (await response.json()) as ApiErrorResponse;
+        } catch {
+          errorData = {
+            message: response.statusText || `HTTP Error ${response.status}`,
+          };
+        }
+
+        throw new ApiError(
+          errorData.message,
+          response.status,
+          errorData.code,
+          errorData.userMessage, // Теперь это string | undefined
+          errorData.details
+        );
+      }
+
+      // Для пустых ответов
+      if (response.status === 204) {
+        return undefined as T;
+      }
+
+      // Парсим JSON
+      try {
+        return (await response.json()) as T;
+      } catch {
+        throw new ApiError("Failed to parse response", 500, "PARSE_ERROR");
+      }
+    } catch (error) {
+      clearTimeout(timeoutId);
+
+      const appError = toAppError(error);
+
+      // Глобальная обработка ошибок аутентификации
+      if (isApiError(appError) &amp;&amp; appError.status === 401) {
+        // Можно добавить автоматический logout
+        console.warn("Authentication error, redirecting to login...");
+      }
+
+      if (retryCount &lt; retries &amp;&amp; shouldRetry(appError)) {
+        return this.request&lt;T&gt;(endpoint, options, retryCount + 1);
+      }
+
+      if (!skipErrorHandling) {
+        this.handleGlobalError(appError);
+      }
+
+      throw appError;
+    }
+  }
+
+  private handleGlobalError(error: AppError) {
+    // Глобальная обработка ошибок
+    console.error("API Error:", error);
+
+    if (isApiError(error) &amp;&amp; error.status === 401) {
+      // Перенаправление на логин будет в компонентах
+    }
+  }
+
+  // Публичные методы API
+  public get&lt;T = unknown&gt;(
+    endpoint: string,
+    options?: RequestOptions
+  ): Promise&lt;T&gt; {
+    return this.request&lt;T&gt;(endpoint, { ...options, method: "GET" });
+  }
+
+  public post&lt;T = unknown&gt;(
+    endpoint: string,
+    body?: unknown,
+    options?: RequestOptions
+  ): Promise&lt;T&gt; {
+    return this.request&lt;T&gt;(endpoint, { ...options, method: "POST", body });
+  }
+
+  public put&lt;T = unknown&gt;(
+    endpoint: string,
+    body?: unknown,
+    options?: RequestOptions
+  ): Promise&lt;T&gt; {
+    return this.request&lt;T&gt;(endpoint, { ...options, method: "PUT", body });
+  }
+
+  public delete&lt;T = unknown&gt;(
+    endpoint: string,
+    options?: RequestOptions
+  ): Promise&lt;T&gt; {
+    return this.request&lt;T&gt;(endpoint, { ...options, method: "DELETE" });
+  }
+
+  public patch&lt;T = unknown&gt;(
+    endpoint: string,
+    body?: unknown,
+    options?: RequestOptions
+  ): Promise&lt;T&gt; {
+    return this.request&lt;T&gt;(endpoint, { ...options, method: "PATCH", body });
+  }
+}
+
+// Вспомогательная функция для определения необходимости повторной попытки
+function shouldRetry(error: AppError): boolean {
+  return (
+    isNetworkError(error) ||
+    isTimeoutError(error) ||
+    (isApiError(error) &amp;&amp; error.status &gt;= 500)
+  );
+}
+
+// Создаем и экспортируем инстанс клиента
+export const apiClient = new ApiClient(process.env.NEXT_PUBLIC_API_URL);
+</file>
+<file name="src/shared/api/types.ts">import { User } from "@/entities/user/model/types";
+
+// src/shared/api/types.ts
+export interface ApiResponse&lt;T = unknown&gt; {
+  data: T;
+  message?: string;
+  success: boolean;
+}
+
+export interface PaginatedResponse&lt;T&gt; extends ApiResponse&lt;T[]&gt; {
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
+}
+
+export interface ApiResponse&lt;T = unknown&gt; {
+  data: T;
+  message?: string;
+  success: boolean;
+}
+
+// Для пользовательских endpoints
+export type UserResponse = ApiResponse&lt;User&gt;;
+</file>
+<file name="src/shared/api/endpoints/auth.ts">import { apiClient } from '../client'
+import { User } from '@/entities/user/model/types'
+
+export interface LoginRequest {
+  email: string
+  password: string
+}
+
+export interface RegisterRequest {
+  email: string
+  password: string
+  name: string
+}
+
+export const authApi = {
+  login: (credentials: LoginRequest): Promise&lt;User&gt; =&gt;
+    apiClient.post('/auth/login', credentials),
+
+  register: (credentials: RegisterRequest): Promise&lt;User&gt; =&gt;
+    apiClient.post('/auth/register', credentials),
+
+  logout: (): Promise&lt;void&gt; =&gt;
+    apiClient.post('/auth/logout'),
+
+  getMe: (): Promise&lt;User&gt; =&gt;
+    apiClient.get('/auth/me'),
+
+  refreshToken: (): Promise&lt;{ accessToken: string }&gt; =&gt;
+    apiClient.post('/auth/refresh'),
+}</file>
+<file name="src/shared/api/endpoints/users.ts"></file>
+<file name="src/shared/lib/config.ts">// src/shared/lib/config.ts
+class AppConfig {
+  get apiUrl(): string {
+    const url = process.env.NEXT_PUBLIC_API_URL
+    if (!url) {
+      throw new Error('NEXT_PUBLIC_API_URL is not defined')
+    }
+    return url
+  }
+
+  get isDevelopment(): boolean {
+    return process.env.NODE_ENV === 'development'
+  }
+
+  get isProduction(): boolean {
+    return process.env.NODE_ENV === 'production'
+  }
+}
+
+export const config = new AppConfig()</file>
+<file name="src/shared/lib/errors.ts">// Базовый класс для всех ошибок приложения
+export abstract class AppError extends Error {
+  abstract readonly code: string;
+  abstract readonly status: number;
+  abstract readonly userMessage: string;
+  public readonly field?: string; // Добавляем опциональное поле
+
+  constructor(message: string, field?: string) {
+    super(message);
+    this.name = this.constructor.name;
+    this.field = field;
+  }
+}
+
+// Сетевые ошибки
+export class NetworkError extends AppError {
+  readonly code = "NETWORK_ERROR";
+  readonly status = 0;
+  readonly userMessage = "Проблемы с соединением. Проверьте интернет.";
+
+  constructor(message: string = "Network error occurred") {
+    super(message);
+  }
+}
+
+export class TimeoutError extends AppError {
+  readonly code = "TIMEOUT_ERROR";
+  readonly status = 408;
+  readonly userMessage = "Превышено время ожидания. Попробуйте снова.";
+
+  constructor(message: string = "Request timeout") {
+    super(message);
+  }
+}
+
+// Ошибки API
+export class ApiError extends AppError {
+  readonly userMessage: string;
+  public readonly details?: unknown;
+
+  constructor(
+    message: string,
+    public readonly status: number,
+    public readonly code: string = "API_ERROR",
+    userMessage?: string,
+    details?: unknown,
+    field?: string // Добавляем field параметр
+  ) {
+    super(message, field); // Передаем field в родительский класс
+    this.userMessage = userMessage || this.getDefaultUserMessage(status);
+    this.details = details;
+  }
+
+  private getDefaultUserMessage(status: number): string {
+    const messages: Record&lt;number, string&gt; = {
+      400: "Неверный запрос.",
+      401: "Требуется авторизация.",
+      403: "Доступ запрещен.",
+      404: "Ресурс не найден.",
+      409: "Конфликт данных.",
+      422: "Ошибка валидации.",
+      429: "Слишком много запросов.",
+      500: "Внутренняя ошибка сервера.",
+      502: "Проблемы с сервером.",
+      503: "Сервис временно недоступен.",
+    };
+
+    return messages[status] || "Произошла ошибка. Попробуйте снова.";
+  }
+}
+
+// Ошибки валидации
+export class ValidationError extends AppError {
+  readonly code = "VALIDATION_ERROR";
+  readonly status = 400;
+  readonly userMessage: string;
+
+  constructor(message: string, public readonly field?: string) {
+    super(message, field);
+    this.userMessage = field
+      ? `Ошибка в поле "${field}": ${message}`
+      : `Ошибка валидации: ${message}`;
+  }
+}
+
+// Type guards для безопасной проверки типов
+export function isAppError(error: unknown): error is AppError {
+  return error instanceof AppError;
+}
+
+export function isNetworkError(error: unknown): error is NetworkError {
+  return error instanceof NetworkError;
+}
+
+export function isTimeoutError(error: unknown): error is TimeoutError {
+  return error instanceof TimeoutError;
+}
+
+export function isApiError(error: unknown): error is ApiError {
+  return error instanceof ApiError;
+}
+
+export function isValidationError(error: unknown): error is ValidationError {
+  return error instanceof ValidationError;
+}
+
+// Сначала определим интерфейс для ошибок API с дополнительными полями
+interface ApiErrorResponse {
+  message: string;
+  status?: number;
+  statusCode?: number;
+  code?: string;
+  userMessage?: string;
+  details?: unknown;
+  field?: string;
+}
+
+// Type guard для проверки, что ошибка имеет структуру ApiErrorResponse
+function isApiErrorResponse(error: unknown): error is Error &amp; ApiErrorResponse {
+  if (!(error instanceof Error)) {
+    return false;
+  }
+
+  // Безопасная проверка через временное приведение
+  const potentialApiError = error as Partial&lt;ApiErrorResponse&gt;;
+
+  return (
+    typeof potentialApiError.message === "string" &amp;&amp;
+    (typeof potentialApiError.status === "number" ||
+      typeof potentialApiError.statusCode === "number" ||
+      typeof potentialApiError.code === "string" ||
+      typeof potentialApiError.userMessage === "string")
+  );
+}
+
+// Обновленная функция toAppError
+export function toAppError(error: unknown): AppError {
+  if (isAppError(error)) {
+    return error;
+  }
+
+  if (error instanceof Error) {
+    if (error.name === "AbortError") {
+      return new TimeoutError(error.message);
+    }
+
+    // Используем наш type guard
+    if (isApiErrorResponse(error)) {
+      const status = error.status || error.statusCode || 0;
+
+      return new ApiError(
+        error.message,
+        status,
+        error.code,
+        error.userMessage,
+        error.details,
+        error.field
+      );
+    }
+
+    // Безопасное извлечение свойств через проверку типа
+    if (typeof error === "object" &amp;&amp; error !== null) {
+      // Корректное приведение типов через unknown
+      const errorObj = error as unknown as Record&lt;string, unknown&gt;;
+
+      const status =
+        getNumberProperty(errorObj, "status") ||
+        getNumberProperty(errorObj, "statusCode") ||
+        0;
+
+      const message =
+        getStringProperty(errorObj, "message") ||
+        getStringProperty(errorObj, "error") ||
+        error.message;
+
+      if (status &gt; 0) {
+        return new ApiError(
+          message,
+          status,
+          getStringProperty(errorObj, "code"),
+          getStringProperty(errorObj, "userMessage"),
+          errorObj.details,
+          getStringProperty(errorObj, "field")
+        );
+      }
+    }
+
+    return new NetworkError(error.message);
+  }
+
+  // Обработка примитивных типов
+  if (typeof error === "string") {
+    return new NetworkError(error);
+  }
+
+  if (typeof error === "number") {
+    return new ApiError(`Error ${error}`, 0, "UNKNOWN_ERROR");
+  }
+
+  return new NetworkError("An unknown error occurred");
+}
+
+// Улучшенные вспомогательные функции
+function getStringProperty(obj: unknown, prop: string): string | undefined {
+  if (typeof obj !== "object" || obj === null) return undefined;
+
+  const value = (obj as Record&lt;string, unknown&gt;)[prop];
+  return typeof value === "string" ? value : undefined;
+}
+
+function getNumberProperty(obj: unknown, prop: string): number | undefined {
+  if (typeof obj !== "object" || obj === null) return undefined;
+
+  const value = (obj as Record&lt;string, unknown&gt;)[prop];
+  if (typeof value === "number") return value;
+  if (typeof value === "string") {
+    const num = Number(value);
+    return isNaN(num) ? undefined : num;
+  }
+  return undefined;
+}
+</file>
+<file name="src/shared/lib/providers.tsx">// src/shared/lib/providers.tsx
+'use client'
+
+import { useEffect, useState } from 'react'
+import { QueryClient, QueryCache, MutationCache, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
+import { useAuthActions } from '@/entities/session/model/session.store'
+import { isApiError } from '@/shared/lib/errors'
+import { ThemeProvider } from '../ui/theme-provider'
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  const [queryClient] = useState(() =&gt; new QueryClient({
+    queryCache: new QueryCache({
+      onError: (error) =&gt; {
+        // Глобальная обработка ошибок запросов
+        console.error('Query error:', error)
+        
+        if (isApiError(error) &amp;&amp; error.status === 401) {
+          console.warn('Authentication error detected in query')
+        }
+      },
+    }),
+    mutationCache: new MutationCache({
+      onError: (error) =&gt; {
+        // Глобальная обработка ошибок мутаций
+        console.error('Mutation error:', error)
+      },
+    }),
+    defaultOptions: {
+      queries: {
+        staleTime: 5 * 60 * 1000, // 5 минут
+        retry: (failureCount, error) =&gt; {
+          // Используем нашу систему ошибок
+          if (isApiError(error)) {
+            // Не повторяем запрос при клиентских ошибках (кроме 401)
+            if (error.status &gt;= 400 &amp;&amp; error.status &lt; 500 &amp;&amp; error.status !== 401) {
+              return false
+            }
+          }
+          
+          // Для сетевых ошибок и серверных ошибок - повторяем до 2 раз
+          return failureCount &lt; 2
+        },
+        refetchOnWindowFocus: process.env.NODE_ENV === 'production',
+      },
+      mutations: {
+        retry: (failureCount, error) =&gt; {
+          // Для мутаций меньше повторных попыток
+          if (isApiError(error) &amp;&amp; error.status &gt;= 400 &amp;&amp; error.status &lt; 500) {
+            return false
+          }
+          return failureCount &lt; 1
+        },
+      },
+    },
+  }))
+
+  const { checkAuth } = useAuthActions()
+
+  useEffect(() =&gt; {
+    checkAuth()
+  }, [checkAuth])
+
+  return (
+    &lt;QueryClientProvider client={queryClient}&gt;
+      &lt;ThemeProvider attribute="class" defaultTheme="system" enableSystem&gt;
+        {children}
+      &lt;/ThemeProvider&gt;
+      {process.env.NODE_ENV === 'development' &amp;&amp; (
+        &lt;ReactQueryDevtools initialIsOpen={false} /&gt;
+      )}
+    &lt;/QueryClientProvider&gt;
+  )
+}</file>
+<file name="src/shared/lib/query-types.ts">// src/shared/lib/query-types.ts
+import { AppError, isApiError } from './errors'
+
+// Расширяем типы TanStack Query для лучшей интеграции с нашей системой ошибок
+declare module '@tanstack/react-query' {
+  interface Register {
+    defaultError: AppError
+  }
+}
+
+// Утилита для безопасного извлечения сообщения об ошибке из запросов
+export function getQueryErrorMessage(error: unknown): string {
+  if (isApiError(error)) {
+    return error.userMessage
+  }
+  
+  if (error instanceof Error) {
+    return error.message
+  }
+  
+  return 'An unknown error occurred'
+}
+
+// Хук для удобной работы с ошибками в компонентах
+export function useQueryErrorHandler() {
+  const handleError = (error: unknown) =&gt; {
+    if (isApiError(error)) {
+      // Можно добавить логику показа уведомлений
+      console.error('API Error:', error.message, error.status)
+    } else {
+      console.error('Error:', error)
+    }
+  }
+  
+  return { handleError }
+}</file>
+<file name="src/shared/lib/use-error-handler.ts">import { useState, useCallback } from 'react'
+import { AppError, toAppError, isApiError } from './errors'
+
+interface UseErrorHandlerReturn {
+  error: AppError | null
+  clearError: () =&gt; void
+  handleError: (error: unknown) =&gt; void
+  withErrorHandling: &lt;T&gt;(promise: Promise&lt;T&gt;) =&gt; Promise&lt;T&gt;
+}
+
+export function useErrorHandler(): UseErrorHandlerReturn {
+  const [error, setError] = useState&lt;AppError | null&gt;(null)
+
+  const clearError = useCallback(() =&gt; setError(null), [])
+
+  const handleError = useCallback((error: unknown) =&gt; {
+    const appError = toAppError(error)
+    setError(appError)
+    
+    // Дополнительная логика обработки (тосты, логирование и т.д.)
+    if (isApiError(appError) &amp;&amp; appError.status === 401) {
+      // Логика логаута будет в session store
+    }
+  }, [])
+
+  const withErrorHandling = useCallback(async &lt;T&gt;(promise: Promise&lt;T&gt;): Promise&lt;T&gt; =&gt; {
+    try {
+      clearError()
+      return await promise
+    } catch (error) {
+      handleError(error)
+      throw error
+    }
+  }, [clearError, handleError])
+
+  return {
+    error,
+    clearError,
+    handleError,
+    withErrorHandling,
+  }
+}</file>
+<file name="src/shared/lib/utils.ts">// src/shared/lib/utils.ts
+import { type ClassValue, clsx } from 'clsx'
+import { twMerge } from 'tailwind-merge'
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
+// src/shared/utils/validators.ts
+export const emailValidator = (email: string): boolean =&gt; {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailRegex.test(email)
+}
+
+export const passwordValidator = (password: string): boolean =&gt; {
+  return password.length &gt;= 6
+}</file>
+<file name="src/shared/ui/accordion.tsx">"use client"
+
+import * as React from "react"
+import { cn } from '@/shared/lib/utils'
+
+interface AccordionProps {
+  type?: "single" | "multiple"
+  collapsible?: boolean
+  children: React.ReactNode
+  className?: string
+}
+
+interface AccordionItemProps {
+  value: string
+  children: React.ReactNode
+  className?: string
+}
+
+interface AccordionTriggerProps {
+  children: React.ReactNode
+  className?: string
+}
+
+interface AccordionContentProps {
+  children: React.ReactNode
+  className?: string
+}
+
+const Accordion = ({ children, className }: AccordionProps) =&gt; {
+  return (
+    &lt;div className={cn("w-full", className)}&gt;
+      {children}
+    &lt;/div&gt;
+  )
+}
+
+const AccordionItem = React.forwardRef&lt;
+  HTMLDivElement,
+  AccordionItemProps
+&gt;(({ className, children, ...props }, ref) =&gt; (
+  &lt;div
+    ref={ref}
+    className={cn("border-b", className)}
+    {...props}
+  &gt;
+    {children}
+  &lt;/div&gt;
+))
+AccordionItem.displayName = "AccordionItem"
+
+const AccordionTrigger = React.forwardRef&lt;
+  HTMLButtonElement,
+  AccordionTriggerProps
+&gt;(({ className, children, ...props }, ref) =&gt; (
+  &lt;button
+    ref={ref}
+    className={cn(
+      "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&amp;[data-state=open]&gt;svg]:rotate-180",
+      className
+    )}
+    {...props}
+  &gt;
+    {children}
+    &lt;svg
+      className="h-4 w-4 shrink-0 transition-transform duration-200"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    &gt;
+      &lt;path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /&gt;
+    &lt;/svg&gt;
+  &lt;/button&gt;
+))
+AccordionTrigger.displayName = "AccordionTrigger"
+
+const AccordionContent = React.forwardRef&lt;
+  HTMLDivElement,
+  AccordionContentProps
+&gt;(({ className, children, ...props }, ref) =&gt; (
+  &lt;div
+    ref={ref}
+    className={cn(
+      "overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down",
+      className
+    )}
+    {...props}
+  &gt;
+    &lt;div className="pb-4 pt-0"&gt;{children}&lt;/div&gt;
+  &lt;/div&gt;
+))
+AccordionContent.displayName = "AccordionContent"
+
+export {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+}</file>
+<file name="src/shared/ui/avatar.tsx">// src/shared/ui/avatar.tsx
+"use client"
+
+import * as React from "react"
+import Image, { type StaticImageData } from "next/image"
+import { cn } from '@/shared/lib/utils'
+
+// Добавляем fallback изображение (можно создать или использовать data URL)
+const DEFAULT_AVATAR = '/images/avatar-placeholder.png'
+
+const Avatar = React.forwardRef&lt;
+  HTMLDivElement,
+  React.HTMLAttributes&lt;HTMLDivElement&gt;
+&gt;(({ className, ...props }, ref) =&gt; (
+  &lt;div
+    ref={ref}
+    className={cn(
+      "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full",
+      className
+    )}
+    {...props}
+  /&gt;
+))
+Avatar.displayName = "Avatar"
+
+interface AvatarImageProps extends Omit&lt;React.ComponentProps&lt;typeof Image&gt;, 'src'&gt; {
+  src?: string | StaticImageData | null
+  alt: string
+}
+
+const AvatarImage = React.forwardRef&lt;
+  HTMLImageElement,
+  AvatarImageProps
+&gt;(({ className, alt, src, ...props }, ref) =&gt; {
+  // Используем fallback если src не предоставлен
+  const imageSrc = src || DEFAULT_AVATAR
+  
+  return (
+    &lt;Image
+      ref={ref}
+      className={cn("aspect-square h-full w-full", className)}
+      alt={alt}
+      src={imageSrc}
+      fill
+      style={{ objectFit: "cover" }}
+      {...props}
+    /&gt;
+  )
+})
+AvatarImage.displayName = "AvatarImage"
+
+const AvatarFallback = React.forwardRef&lt;
+  HTMLDivElement,
+  React.HTMLAttributes&lt;HTMLDivElement&gt;
+&gt;(({ className, ...props }, ref) =&gt; (
+  &lt;div
+    ref={ref}
+    className={cn(
+      "flex h-full w-full items-center justify-center rounded-full bg-muted",
+      className
+    )}
+    {...props}
+  /&gt;
+))
+AvatarFallback.displayName = "AvatarFallback"
+
+export { Avatar, AvatarImage, AvatarFallback }</file>
+<file name="src/shared/ui/badge.tsx">import * as React from "react"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from '@/shared/lib/utils'
+
+const badgeVariants = cva(
+  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  {
+    variants: {
+      variant: {
+        default:
+          "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
+        secondary:
+          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        destructive:
+          "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
+        outline: "text-foreground",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+)
+
+export interface BadgeProps
+  extends React.HTMLAttributes&lt;HTMLDivElement&gt;,
+    VariantProps&lt;typeof badgeVariants&gt; {}
+
+function Badge({ className, variant, ...props }: BadgeProps) {
+  return (
+    &lt;div className={cn(badgeVariants({ variant }), className)} {...props} /&gt;
+  )
+}
+
+export { Badge, badgeVariants }</file>
+<file name="src/shared/ui/button.tsx">import * as React from "react"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from '@/shared/lib/utils'
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        outline: "border border-input hover:bg-accent hover:text-accent-foreground",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+        link: "underline-offset-4 hover:underline text-primary",
+      },
+      size: {
+        default: "h-10 py-2 px-4",
+        sm: "h-9 px-3 rounded-md",
+        lg: "h-11 px-8 rounded-md",
+        icon: "h-10 w-10", // Добавляем размер для иконок
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes&lt;HTMLButtonElement&gt;,
+    VariantProps&lt;typeof buttonVariants&gt; {}
+
+const Button = React.forwardRef&lt;HTMLButtonElement, ButtonProps&gt;(
+  ({ className, variant, size, ...props }, ref) =&gt; {
+    return (
+      &lt;button
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      /&gt;
+    )
+  }
+)
+Button.displayName = "Button"
+
+export { Button, buttonVariants }</file>
+<file name="src/shared/ui/card.tsx">import * as React from "react"
+import { cn } from '@/shared/lib/utils'
+
+const Card = React.forwardRef&lt;
+  HTMLDivElement,
+  React.HTMLAttributes&lt;HTMLDivElement&gt;
+&gt;(({ className, ...props }, ref) =&gt; (
+  &lt;div
+    ref={ref}
+    className={cn(
+      "rounded-lg border bg-card text-card-foreground shadow-sm",
+      className
+    )}
+    {...props}
+  /&gt;
+))
+Card.displayName = "Card"
+
+const CardHeader = React.forwardRef&lt;
+  HTMLDivElement,
+  React.HTMLAttributes&lt;HTMLDivElement&gt;
+&gt;(({ className, ...props }, ref) =&gt; (
+  &lt;div
+    ref={ref}
+    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    {...props}
+  /&gt;
+))
+CardHeader.displayName = "CardHeader"
+
+const CardTitle = React.forwardRef&lt;
+  HTMLParagraphElement,
+  React.HTMLAttributes&lt;HTMLHeadingElement&gt;
+&gt;(({ className, ...props }, ref) =&gt; (
+  &lt;h3
+    ref={ref}
+    className={cn(
+      "text-2xl font-semibold leading-none tracking-tight",
+      className
+    )}
+    {...props}
+  /&gt;
+))
+CardTitle.displayName = "CardTitle"
+
+const CardDescription = React.forwardRef&lt;
+  HTMLParagraphElement,
+  React.HTMLAttributes&lt;HTMLParagraphElement&gt;
+&gt;(({ className, ...props }, ref) =&gt; (
+  &lt;p
+    ref={ref}
+    className={cn("text-sm text-muted-foreground", className)}
+    {...props}
+  /&gt;
+))
+CardDescription.displayName = "CardDescription"
+
+const CardContent = React.forwardRef&lt;
+  HTMLDivElement,
+  React.HTMLAttributes&lt;HTMLDivElement&gt;
+&gt;(({ className, ...props }, ref) =&gt; (
+  &lt;div ref={ref} className={cn("p-6 pt-0", className)} {...props} /&gt;
+))
+CardContent.displayName = "CardContent"
+
+const CardFooter = React.forwardRef&lt;
+  HTMLDivElement,
+  React.HTMLAttributes&lt;HTMLDivElement&gt;
+&gt;(({ className, ...props }, ref) =&gt; (
+  &lt;div
+    ref={ref}
+    className={cn("flex items-center p-6 pt-0", className)}
+    {...props}
+  /&gt;
+))
+CardFooter.displayName = "CardFooter"
+
+export { 
+  Card, 
+  CardHeader, 
+  CardTitle, 
+  CardDescription, 
+  CardContent, 
+  CardFooter 
+}</file>
+<file name="src/shared/ui/dropdown-menu.tsx">"use client"
+
+import * as React from "react"
+import { cn } from '@/shared/lib/utils'
+
+interface DropdownMenuProps {
+  children: React.ReactNode
+}
+
+interface DropdownMenuTriggerProps {
+  children: React.ReactNode
+  asChild?: boolean
+}
+
+interface DropdownMenuContentProps {
+  children: React.ReactNode
+  className?: string
+  align?: 'start' | 'center' | 'end'
+  forceMount?: boolean
+}
+
+interface DropdownMenuItemProps {
+  children: React.ReactNode
+  className?: string
+  onClick?: () =&gt; void
+  asChild?: boolean
+}
+
+interface DropdownMenuLabelProps {
+  children: React.ReactNode
+  className?: string
+}
+
+interface DropdownMenuSeparatorProps {
+  className?: string
+}
+
+const DropdownMenu = ({ children }: DropdownMenuProps) =&gt; {
+  return &lt;div className="relative"&gt;{children}&lt;/div&gt;
+}
+
+const DropdownMenuTrigger = React.forwardRef&lt;
+  HTMLButtonElement,
+  DropdownMenuTriggerProps
+&gt;(({ children, ...props }, ref) =&gt; {
+  return (
+    &lt;button
+      ref={ref}
+      {...props}
+    &gt;
+      {children}
+    &lt;/button&gt;
+  )
+})
+DropdownMenuTrigger.displayName = "DropdownMenuTrigger"
+
+const DropdownMenuContent = React.forwardRef&lt;
+  HTMLDivElement,
+  DropdownMenuContentProps
+&gt;(({ className, align = "center", children, ...props }, ref) =&gt; {
+  return (
+    &lt;div
+      ref={ref}
+      className={cn(
+        "z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md",
+        "animate-in fade-in-0 zoom-in-95",
+        align === "end" &amp;&amp; "right-0",
+        className
+      )}
+      {...props}
+    &gt;
+      {children}
+    &lt;/div&gt;
+  )
+})
+DropdownMenuContent.displayName = "DropdownMenuContent"
+
+const DropdownMenuItem = React.forwardRef&lt;
+  HTMLDivElement,
+  DropdownMenuItemProps
+&gt;(({ className,  children, ...props }, ref) =&gt; {
+  return (
+    &lt;div
+      ref={ref}
+      className={cn(
+        "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        className
+      )}
+      {...props}
+    &gt;
+      {children}
+    &lt;/div&gt;
+  )
+})
+DropdownMenuItem.displayName = "DropdownMenuItem"
+
+const DropdownMenuLabel = React.forwardRef&lt;
+  HTMLDivElement,
+  DropdownMenuLabelProps
+&gt;(({ className, children, ...props }, ref) =&gt; {
+  return (
+    &lt;div
+      ref={ref}
+      className={cn("px-2 py-1.5 text-sm font-semibold", className)}
+      {...props}
+    &gt;
+      {children}
+    &lt;/div&gt;
+  )
+})
+DropdownMenuLabel.displayName = "DropdownMenuLabel"
+
+const DropdownMenuSeparator = React.forwardRef&lt;
+  HTMLDivElement,
+  DropdownMenuSeparatorProps
+&gt;(({ className, ...props }, ref) =&gt; {
+  return (
+    &lt;div
+      ref={ref}
+      className={cn("-mx-1 my-1 h-px bg-muted", className)}
+      {...props}
+    /&gt;
+  )
+})
+DropdownMenuSeparator.displayName = "DropdownMenuSeparator"
+
+export {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+}</file>
+<file name="src/shared/ui/input.tsx">import * as React from "react";
+import { cn } from "@/shared/lib/utils";
+
+export type InputProps = React.InputHTMLAttributes&lt;HTMLInputElement&gt;;
+
+const Input = React.forwardRef&lt;HTMLInputElement, InputProps&gt;(
+  ({ className, type, ...props }, ref) =&gt; {
+    return (
+      &lt;input
+        type={type}
+        className={cn(
+          "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          className
+        )}
+        ref={ref}
+        {...props}
+      /&gt;
+    );
+  }
+);
+Input.displayName = "Input";
+
+export { Input };
+</file>
+<file name="src/shared/ui/label.tsx">"use client"
+
+import * as React from "react"
+import { cn } from '@/shared/lib/utils'
+
+const Label = React.forwardRef&lt;
+  HTMLLabelElement,
+  React.LabelHTMLAttributes&lt;HTMLLabelElement&gt;
+&gt;(({ className, ...props }, ref) =&gt; (
+  &lt;label
+    ref={ref}
+    className={cn(
+      "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+      className
+    )}
+    {...props}
+  /&gt;
+))
+Label.displayName = "Label"
+
+export { Label }</file>
+<file name="src/shared/ui/loading-spinner.tsx">// src/shared/ui/loading-spinner.tsx
+export function LoadingSpinner() {
+  return (
+    &lt;div className="flex items-center justify-center"&gt;
+      &lt;div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  )
+}</file>
+<file name="src/shared/ui/sheet.tsx">"use client"
+
+import * as React from "react"
+import { cn } from '@/shared/lib/utils'
+
+interface SheetProps {
+  open: boolean
+  onOpenChange: (open: boolean) =&gt; void
+  children: React.ReactNode
+}
+
+interface SheetContentProps {
+  children: React.ReactNode
+  className?: string
+  side?: 'left' | 'right' | 'top' | 'bottom'
+}
+
+const Sheet = ({ open, onOpenChange, children }: SheetProps) =&gt; {
+  React.useEffect(() =&gt; {
+    if (open) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+    
+    return () =&gt; {
+      document.body.style.overflow = 'unset'
+    }
+  }, [open])
+
+  const handleBackdropClick = (e: React.MouseEvent) =&gt; {
+    if (e.target === e.currentTarget) {
+      onOpenChange(false)
+    }
+  }
+
+  if (!open) return null
+
+  return (
+    &lt;div 
+      className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm"
+      onClick={handleBackdropClick}
+    &gt;
+      {children}
+    &lt;/div&gt;
+  )
+}
+
+const SheetContent = React.forwardRef&lt;
+  HTMLDivElement,
+  SheetContentProps
+&gt;(({ className, side = 'left', children, ...props }, ref) =&gt; {
+  return (
+    &lt;div
+      ref={ref}
+      className={cn(
+        "fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
+        side === 'left' &amp;&amp; "inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
+        side === 'right' &amp;&amp; "inset-y-0 right-0 h-full w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
+        className
+      )}
+      onClick={(e) =&gt; e.stopPropagation()} // Предотвращаем закрытие при клике на контент
+      {...props}
+    &gt;
+      {children}
+    &lt;/div&gt;
+  )
+})
+SheetContent.displayName = "SheetContent"
+
+const SheetTitle = React.forwardRef&lt;
+  HTMLHeadingElement,
+  React.HTMLAttributes&lt;HTMLHeadingElement&gt;
+&gt;(({ className, ...props }, ref) =&gt; (
+  &lt;h3
+    ref={ref}
+    className={cn("text-lg font-semibold text-foreground", className)}
+    {...props}
+  /&gt;
+))
+SheetTitle.displayName = "SheetTitle"
+
+export { Sheet, SheetContent, SheetTitle }</file>
+<file name="src/shared/ui/tabs.tsx">"use client"
+
+import * as React from "react"
+import { cn } from '@/shared/lib/utils'
+
+interface TabsContextValue {
+  value: string
+  onValueChange: (value: string) =&gt; void
+}
+
+const TabsContext = React.createContext&lt;TabsContextValue | null&gt;(null)
+
+function useTabs() {
+  const context = React.useContext(TabsContext)
+  if (!context) {
+    throw new Error("useTabs must be used within a &lt;Tabs /&gt;")
+  }
+  return context
+}
+
+interface TabsProps {
+  value: string
+  onValueChange: (value: string) =&gt; void
+  children: React.ReactNode
+  className?: string
+}
+
+const Tabs = React.forwardRef&lt;
+  HTMLDivElement,
+  TabsProps
+&gt;(({ value, onValueChange, className, children, ...props }, ref) =&gt; {
+  return (
+    &lt;TabsContext.Provider value={{ value, onValueChange }}&gt;
+      &lt;div ref={ref} className={cn("flex flex-col space-y-2", className)} {...props}&gt;
+        {children}
+      &lt;/div&gt;
+    &lt;/TabsContext.Provider&gt;
+  )
+})
+Tabs.displayName = "Tabs"
+
+const TabsList = React.forwardRef&lt;
+  HTMLDivElement,
+  React.HTMLAttributes&lt;HTMLDivElement&gt;
+&gt;(({ className, ...props }, ref) =&gt; (
+  &lt;div
+    ref={ref}
+    className={cn(
+      "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
+      className
+    )}
+    {...props}
+  /&gt;
+))
+TabsList.displayName = "TabsList"
+
+interface TabsTriggerProps {
+  value: string
+  children: React.ReactNode
+  className?: string
+}
+
+const TabsTrigger = React.forwardRef&lt;
+  HTMLButtonElement,
+  TabsTriggerProps
+&gt;(({ value, className, children, ...props }, ref) =&gt; {
+  const { value: selectedValue, onValueChange } = useTabs()
+  const isActive = selectedValue === value
+
+  return (
+    &lt;button
+      ref={ref}
+      className={cn(
+        "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+        isActive 
+          ? "bg-background text-foreground shadow-sm" 
+          : "hover:bg-background/50 hover:text-foreground",
+        className
+      )}
+      onClick={() =&gt; onValueChange(value)}
+      {...props}
+    &gt;
+      {children}
+    &lt;/button&gt;
+  )
+})
+TabsTrigger.displayName = "TabsTrigger"
+
+interface TabsContentProps {
+  value: string
+  children: React.ReactNode
+  className?: string
+}
+
+const TabsContent = React.forwardRef&lt;
+  HTMLDivElement,
+  TabsContentProps
+&gt;(({ value, className, children, ...props }, ref) =&gt; {
+  const { value: selectedValue } = useTabs()
+  const isActive = selectedValue === value
+
+  if (!isActive) return null
+
+  return (
+    &lt;div
+      ref={ref}
+      className={cn(
+        "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        className
+      )}
+      {...props}
+    &gt;
+      {children}
+    &lt;/div&gt;
+  )
+})
+TabsContent.displayName = "TabsContent"
+
+export { Tabs, TabsList, TabsTrigger, TabsContent }</file>
+<file name="src/shared/ui/theme-provider.tsx">'use client'
+
+import * as React from 'react'
+
+type Theme = 'light' | 'dark' | 'system'
+
+interface ThemeProviderProps {
+  children: React.ReactNode
+  attribute?: string
+  defaultTheme?: Theme
+  enableSystem?: boolean
+}
+
+interface ThemeProviderState {
+  theme: Theme
+  setTheme: (theme: Theme) =&gt; void
+}
+
+const ThemeProviderContext = React.createContext&lt;ThemeProviderState | undefined&gt;(undefined)
+
+export function ThemeProvider({
+  children,
+  attribute = 'data-theme',
+  defaultTheme = 'system',
+ // enableSystem = true,
+}: ThemeProviderProps) {
+  const [theme, setTheme] = React.useState&lt;Theme&gt;(defaultTheme)
+
+  React.useEffect(() =&gt; {
+    const root = window.document.documentElement
+
+    root.classList.remove('light', 'dark')
+
+    if (theme === 'system') {
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light'
+
+      root.classList.add(systemTheme)
+      root.setAttribute(attribute, systemTheme)
+    } else {
+      root.classList.add(theme)
+      root.setAttribute(attribute, theme)
+    }
+  }, [theme, attribute])
+
+  const value = {
+    theme,
+    setTheme: (theme: Theme) =&gt; {
+      setTheme(theme)
+    },
+  }
+
+  return (
+    &lt;ThemeProviderContext.Provider value={value}&gt;
+      {children}
+    &lt;/ThemeProviderContext.Provider&gt;
+  )
+}
+
+export const useTheme = () =&gt; {
+  const context = React.useContext(ThemeProviderContext)
+  if (context === undefined) {
+    throw new Error('useTheme must be used within a ThemeProvider')
+  }
+  return context
+}</file>
+<file name="src/shared/utils/error-utils.ts">import { AppError, ApiError } from '@/shared/lib/errors'
+
+/**
+ * Безопасно извлекает сообщение об ошибке
+ */
+export function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message
+  if (typeof error === 'string') return error
+  return 'An unknown error occurred'
+}
+
+/**
+ * Безопасно извлекает user-friendly сообщение
+ */
+export function getUserErrorMessage(error: unknown): string {
+  if (error instanceof AppError) return error.userMessage
+  return getErrorMessage(error)
+}
+
+/**
+ * Безопасно извлекает код ошибки
+ */
+export function getErrorCode(error: unknown): string | undefined {
+  if (error instanceof AppError) return error.code
+  
+  if (typeof error === 'object' &amp;&amp; error !== null &amp;&amp; 'code' in error) {
+    const code = (error as { code: unknown }).code
+    return typeof code === 'string' ? code : undefined
+  }
+  
+  return undefined
+}
+
+/**
+ * Проверяет, является ли ошибка сетевой
+ */
+export function isNetworkError(error: unknown): boolean {
+  return error instanceof Error &amp;&amp; (
+    error.message.includes('Failed to fetch') || 
+    error.message.includes('Network request failed') ||
+    error.name === 'NetworkError'
+  )
+}
+
+/**
+ * Создает объект ошибки из различных форматов
+ */
+export function normalizeError(error: unknown): AppError {
+  if (error instanceof AppError) {
+    return error
+  }
+  
+  const message = getErrorMessage(error)
+  return new ApiError(message, 0, 'UNKNOWN_ERROR')
+}</file>
+<file name="src/shared/utils/validators.ts">// src/shared/utils/validation.ts
+import { z } from 'zod'
+
+export const loginSchema = z.object({
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+})
+
+export const registerSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  confirmPassword: z.string(),
+}).refine((data) =&gt; data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+})</file>
+<file name="src/widgets/dashboard-stats/model/use-dashboard-stats.ts">import { useState, useEffect } from 'react'
+import { apiClient } from '@/shared/api/client'
+import { AppError, toAppError } from '@/shared/lib/errors'
+
+interface DashboardStats {
+  totalProjects: number
+  completedTasks: number
+  pendingTasks: number
+  productivity: number
+  recentActivity: {
+    action: string
+    project: string
+    time: string
+  }[]
+}
+
+export function useDashboardStats() {
+  const [data, setData] = useState&lt;DashboardStats | null&gt;(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState&lt;AppError | null&gt;(null)
+
+  useEffect(() =&gt; {
+    let mounted = true
+
+    const fetchData = async () =&gt; {
+      try {
+        setIsLoading(true)
+        setError(null)
+        const stats = await apiClient.get&lt;DashboardStats&gt;('/dashboard/stats')
+        if (mounted) {
+          setData(stats)
+        }
+      } catch (err) {
+        if (mounted) {
+          setError(toAppError(err))
+        }
+      } finally {
+        if (mounted) {
+          setIsLoading(false)
+        }
+      }
+    }
+
+    fetchData()
+
+    return () =&gt; {
+      mounted = false
+    }
+  }, [])
+
+  return { data, isLoading, error }
+}</file>
+<file name="src/widgets/dashboard-stats/ui/dashboard-stats.tsx">'use client'
+
+
+import { useUser } from '@/entities/session/model/session.store';
+import { useDashboardStats } from '../model/use-dashboard-stats'
+import { Card, CardHeader, CardTitle, CardContent } from '@/shared/ui/card';
+
+// Вспомогательный компонент для карточки статистики
+function StatCard({ title, value, subtitle, icon }: { title: string; value: string; subtitle?: string; icon?: React.ReactNode }) {
+  return (
+    &lt;Card&gt;
+      &lt;CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"&gt;
+        &lt;CardTitle className="text-sm font-medium"&gt;{title}&lt;/CardTitle&gt;
+        {icon}
+      &lt;/CardHeader&gt;
+      &lt;CardContent&gt;
+        &lt;div className="text-2xl font-bold"&gt;{value}&lt;/div&gt;
+        {subtitle &amp;&amp; &lt;p className="text-xs text-muted-foreground"&gt;{subtitle}&lt;/p&gt;}
+      &lt;/CardContent&gt;
+    &lt;/Card&gt;
+  )
+}
+
+// Основной компонент дашборда
+export function DashboardStats() {
+  const user = useUser()
+  const { data: stats, isLoading, error } = useDashboardStats()
+
+  if (isLoading) {
+    return (
+      &lt;div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"&gt;
+        {[...Array(4)].map((_, i) =&gt; (
+          &lt;Card key={i}&gt;
+            &lt;CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2"&gt;
+              &lt;div className="h-4 w-20 bg-muted animate-pulse rounded"&gt;&lt;/div&gt;
+              &lt;div className="h-4 w-4 bg-muted animate-pulse rounded"&gt;&lt;/div&gt;
+            &lt;/CardHeader&gt;
+            &lt;CardContent&gt;
+              &lt;div className="h-6 w-12 bg-muted animate-pulse rounded mb-1"&gt;&lt;/div&gt;
+              &lt;div className="h-3 w-16 bg-muted animate-pulse rounded"&gt;&lt;/div&gt;
+            &lt;/CardContent&gt;
+          &lt;/Card&gt;
+        ))}
+      &lt;/div&gt;
+    )
+  }
+
+  if (error) {
+    return (
+      &lt;Card&gt;
+        &lt;CardContent className="p-6"&gt;
+          &lt;div className="text-center text-destructive"&gt;
+            &lt;p&gt;Не удалось загрузить статистику&lt;/p&gt;
+            &lt;p className="text-sm"&gt;{error.message}&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/CardContent&gt;
+      &lt;/Card&gt;
+    )
+  }
+
+  if (!stats) {
+    return null
+  }
+
+  return (
+    &lt;div className="space-y-6"&gt;
+      &lt;div&gt;
+        &lt;h2 className="text-2xl font-bold tracking-tight"&gt;Добро пожаловать, {user?.name}!&lt;/h2&gt;
+        &lt;p className="text-muted-foreground"&gt;Обзор вашей активности и статистики&lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"&gt;
+        &lt;StatCard
+          title="Всего проектов"
+          value={stats.totalProjects.toString()}
+          subtitle="+2 с прошлой недели"
+          icon={&lt;FolderIcon className="h-4 w-4 text-muted-foreground" /&gt;}
+        /&gt;
+        &lt;StatCard
+          title="Завершённые задачи"
+          value={stats.completedTasks.toString()}
+          subtitle="+5 за сегодня"
+          icon={&lt;CheckCircleIcon className="h-4 w-4 text-muted-foreground" /&gt;}
+        /&gt;
+        &lt;StatCard
+          title="Ожидающие"
+          value={stats.pendingTasks.toString()}
+          subtitle="2 с высоким приоритетом"
+          icon={&lt;ClockIcon className="h-4 w-4 text-muted-foreground" /&gt;}
+        /&gt;
+        &lt;StatCard
+          title="Продуктивность"
+          value={`${stats.productivity}%`}
+          subtitle="Выше среднего на 15%"
+          icon={&lt;TrendingUpIcon className="h-4 w-4 text-muted-foreground" /&gt;}
+        /&gt;
+      &lt;/div&gt;
+
+      {/* Дополнительные секции дашборда */}
+      &lt;div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7"&gt;
+        &lt;Card className="col-span-4"&gt;
+          &lt;CardHeader&gt;
+            &lt;CardTitle&gt;Последняя активность&lt;/CardTitle&gt;
+          &lt;/CardHeader&gt;
+          &lt;CardContent&gt;
+            &lt;div className="space-y-4"&gt;
+              {stats.recentActivity.map((activity, index) =&gt; (
+                &lt;div key={index} className="flex items-center space-x-4"&gt;
+                  &lt;div className="flex-1 space-y-1"&gt;
+                    &lt;p className="text-sm font-medium leading-none"&gt;{activity.action}&lt;/p&gt;
+                    &lt;p className="text-sm text-muted-foreground"&gt;{activity.project}&lt;/p&gt;
+                  &lt;/div&gt;
+                  &lt;div className="text-sm text-muted-foreground"&gt;{activity.time}&lt;/div&gt;
+                &lt;/div&gt;
+              ))}
+            &lt;/div&gt;
+          &lt;/CardContent&gt;
+        &lt;/Card&gt;
+
+        &lt;Card className="col-span-3"&gt;
+          &lt;CardHeader&gt;
+            &lt;CardTitle&gt;Быстрые действия&lt;/CardTitle&gt;
+          &lt;/CardHeader&gt;
+          &lt;CardContent&gt;
+            &lt;div className="space-y-2"&gt;
+              &lt;button className="w-full text-left p-2 rounded-md hover:bg-accent transition-colors"&gt;
+                Создать новый проект
+              &lt;/button&gt;
+              &lt;button className="w-full text-left p-2 rounded-md hover:bg-accent transition-colors"&gt;
+                Пригласить участника
+              &lt;/button&gt;
+              &lt;button className="w-full text-left p-2 rounded-md hover:bg-accent transition-colors"&gt;
+                Настройки рабочего пространства
+              &lt;/button&gt;
+            &lt;/div&gt;
+          &lt;/CardContent&gt;
+        &lt;/Card&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  )
+}
+
+// Иконки (можно заменить на реальные из библиотеки like lucide-react)
+function FolderIcon(props: React.SVGProps&lt;SVGSVGElement&gt;) {
+  return (
+    &lt;svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor"&gt;
+      &lt;path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/&gt;
+    &lt;/svg&gt;
+  )
+}
+
+function CheckCircleIcon(props: React.SVGProps&lt;SVGSVGElement&gt;) {
+  return (
+    &lt;svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor"&gt;
+      &lt;path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/&gt;
+      &lt;polyline points="22 4 12 14.01 9 11.01"/&gt;
+    &lt;/svg&gt;
+  )
+}
+
+function ClockIcon(props: React.SVGProps&lt;SVGSVGElement&gt;) {
+  return (
+    &lt;svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor"&gt;
+      &lt;circle cx="12" cy="12" r="10"/&gt;
+      &lt;polyline points="12 6 12 12 16 14"/&gt;
+    &lt;/svg&gt;
+  )
+}
+
+function TrendingUpIcon(props: React.SVGProps&lt;SVGSVGElement&gt;) {
+  return (
+    &lt;svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor"&gt;
+      &lt;polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/&gt;
+      &lt;polyline points="17 6 23 6 23 12"/&gt;
+    &lt;/svg&gt;
+  )
+}</file>
+<file name="src/widgets/header/ui/header.tsx">'use client'
+
+import { Button } from '@/shared/ui/button'
+
+import { useAuthActions, useUser } from '@/entities/session/model/session.store'
+
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar'
+import { Bell, Menu, Search } from 'lucide-react'
+import { Input } from '@/shared/ui/input'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from '@/shared/ui/dropdown-menu'
+
+interface AppHeaderProps {
+  onMenuClick: () =&gt; void
+}
+
+export function AppHeader({ onMenuClick }: AppHeaderProps) {
+  const user = useUser()
+  const { logout } = useAuthActions()
+
+  const getInitials = (name: string) =&gt; {
+    return name.split(' ').map(n =&gt; n[0]).join('').toUpperCase()
+  }
+
+  return (
+    &lt;header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"&gt;
+      &lt;div className="flex h-16 items-center justify-between px-4 md:px-6"&gt;
+        {/* Left section */}
+        &lt;div className="flex items-center space-x-4"&gt;
+          &lt;Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={onMenuClick}
+          &gt;
+            &lt;Menu className="h-5 w-5" /&gt;
+          &lt;/Button&gt;
+          
+          &lt;div className="relative w-64 hidden md:block"&gt;
+            &lt;Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" /&gt;
+            &lt;Input
+              placeholder="Search..."
+              className="pl-8"
+            /&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+        {/* Right section */}
+        &lt;div className="flex items-center space-x-4"&gt;
+          &lt;Button variant="ghost" size="icon" className="relative"&gt;
+            &lt;Bell className="h-5 w-5" /&gt;
+            &lt;span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-destructive"&gt;&lt;/span&gt;
+          &lt;/Button&gt;
+
+          &lt;DropdownMenu&gt;
+            &lt;DropdownMenuTrigger asChild&gt;
+              &lt;Button variant="ghost" className="relative h-8 w-8 rounded-full"&gt;
+                &lt;Avatar className="h-8 w-8"&gt;
+                  &lt;AvatarImage src={user?.avatar} alt={user?.name || 'User avatar'} /&gt;
+                  &lt;AvatarFallback&gt;
+                    {getInitials(user?.name || 'U')}
+                  &lt;/AvatarFallback&gt;
+                &lt;/Avatar&gt;
+              &lt;/Button&gt;
+            &lt;/DropdownMenuTrigger&gt;
+            &lt;DropdownMenuContent className="w-56" align="end" forceMount&gt;
+              &lt;DropdownMenuLabel className="font-normal"&gt;
+                &lt;div className="flex flex-col space-y-1"&gt;
+                  &lt;p className="text-sm font-medium leading-none"&gt;{user?.name}&lt;/p&gt;
+                  &lt;p className="text-xs leading-none text-muted-foreground"&gt;
+                    {user?.email}
+                  &lt;/p&gt;
+                &lt;/div&gt;
+              &lt;/DropdownMenuLabel&gt;
+              &lt;DropdownMenuSeparator /&gt;
+              &lt;DropdownMenuItem asChild&gt;
+                &lt;a href="/profile"&gt;Profile&lt;/a&gt;
+              &lt;/DropdownMenuItem&gt;
+              &lt;DropdownMenuItem asChild&gt;
+                &lt;a href="/settings"&gt;Settings&lt;/a&gt;
+              &lt;/DropdownMenuItem&gt;
+              &lt;DropdownMenuSeparator /&gt;
+              &lt;DropdownMenuItem onClick={logout}&gt;
+                Log out
+              &lt;/DropdownMenuItem&gt;
+            &lt;/DropdownMenuContent&gt;
+          &lt;/DropdownMenu&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/header&gt;
+  )
+}</file>
+<file name="src/widgets/sidebar/ui/sidebar.tsx">// Полная версия sidebar.tsx
+'use client'
+
+import { cn } from '@/shared/lib/utils'
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/shared/ui/accordion'
+import { Avatar, AvatarImage, AvatarFallback } from '@/shared/ui/avatar'
+import { Button } from '@/shared/ui/button'
+import { Sheet as AppSheet, SheetContent, SheetTitle } from '@/sha
