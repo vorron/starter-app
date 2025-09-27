@@ -1,7 +1,9 @@
+// src/features/profile-management/model/use-profile-actions.ts
 import { useState } from 'react'
-import { useUserStore } from '@/entities/user/model/user.store' // Импортируем хранилище
+import { useSessionStore } from '@/entities/session/model/session.store' // Исправить импорт
 import { apiClient } from '@/shared/api/client'
 import { AppError, toAppError } from '@/shared/lib/errors'
+import { User } from '@/entities/user/model/types' // Добавить импорт
 
 interface UpdateProfileData {
   name: string
@@ -12,16 +14,17 @@ export function useProfileActions() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<AppError | null>(null)
   
-  // Правильно получаем пользователя и действия из хранилища
-  const user = useUserStore(state => state.user)
-  const updateUser = useUserStore(state => state.updateUser)
+  // Использовать правильное хранилище
+  const user = useSessionStore(state => state.user)
+  const updateUser = useSessionStore(state => state.updateUser)
 
   const updateProfile = async (data: UpdateProfileData) => {
     setIsLoading(true)
     setError(null)
 
     try {
-      const updatedUser = await apiClient.put(`/users/${user?.id}`, data)
+      // Добавить типизацию
+      const updatedUser = await apiClient.put<User>(`/users/${user?.id}`, data)
       updateUser(updatedUser)
       return updatedUser
     } catch (error) {
@@ -38,7 +41,8 @@ export function useProfileActions() {
     setError(null)
 
     try {
-      await apiClient.post('/auth/change-password', {
+      // Типизировать ответ если нужно
+      await apiClient.post<{ success: boolean }>('/auth/change-password', {
         currentPassword,
         newPassword
       })

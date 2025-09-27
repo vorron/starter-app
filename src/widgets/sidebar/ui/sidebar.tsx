@@ -1,10 +1,11 @@
+// Полная версия sidebar.tsx
 'use client'
 
 import { cn } from '@/shared/lib/utils'
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/shared/ui/accordion'
 import { Avatar, AvatarImage, AvatarFallback } from '@/shared/ui/avatar'
 import { Button } from '@/shared/ui/button'
-import { SheetContent, SheetTitle } from '@/shared/ui/sheet'
+import { Sheet as AppSheet, SheetContent, SheetTitle } from '@/shared/ui/sheet'
 import { 
   Home, 
   Users, 
@@ -15,7 +16,6 @@ import {
   CreditCard,
   X,
   type LucideIcon,
-  Sheet
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -132,32 +132,35 @@ function SidebarContent({ isMobile = false }: { isMobile?: boolean }) {
       !isMobile && "w-64 border-r"
     )}>
       {/* Logo */}
-      <div className="flex h-16 items-center border-b px-6">
-        <Link href="/dashboard" className="flex items-center space-x-2">
-          <div className="h-6 w-6 rounded-lg bg-primary"></div>
-          <span className="text-lg font-semibold">FSD App</span>
-        </Link>
+      <div className="flex items-center justify-between p-4 border-b">
+        <div className="flex items-center space-x-2">
+          <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center">
+            <span className="text-primary-foreground font-bold">A</span>
+          </div>
+          <span className="font-semibold">App</span>
+        </div>
+        {isMobile && (
+          <Button variant="ghost" size="icon" onClick={() => {/* close logic */}}>
+            <X className="h-4 w-4" />
+          </Button>
+        )}
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 space-y-2 p-4">
-        {navigation.map((item) => (
-          <div key={item.href}>
-            {renderNavItem(item)}
-          </div>
-        ))}
+        {navigation.map((item) => renderNavItem(item))}
       </nav>
 
-      {/* User info footer */}
-      <div className="border-t p-4">
+      {/* User section */}
+      <div className="p-4 border-t">
         <div className="flex items-center space-x-3">
           <Avatar className="h-8 w-8">
-            <AvatarImage src="" />
+            <AvatarImage src="" alt="User" />
             <AvatarFallback>U</AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium truncate">User Name</p>
-            <p className="text-xs text-muted-foreground truncate">Free Plan</p>
+            <p className="text-xs text-muted-foreground truncate">user@example.com</p>
           </div>
         </div>
       </div>
@@ -168,27 +171,18 @@ function SidebarContent({ isMobile = false }: { isMobile?: boolean }) {
 export function AppSidebar({ open, onOpenChange }: AppSidebarProps) {
   return (
     <>
-      {/* Desktop Sidebar */}
-      <div className="hidden md:flex">
+      {/* Desktop sidebar */}
+      <div className="hidden md:block">
         <SidebarContent />
       </div>
 
-      {/* Mobile Sheet */}
-      <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent side="left" className="p-0 w-64">
-          <div className="flex items-center justify-between h-16 px-6 border-b">
-            <SheetTitle className="text-lg font-semibold">Menu</SheetTitle>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => onOpenChange(false)}
-            >
-              <X className="h-5 w-5" />
-            </Button>
-          </div>
-          <SidebarContent isMobile={true} />
+      {/* Mobile sidebar */}
+      <AppSheet open={open} onOpenChange={onOpenChange}>
+        <SheetContent side="left" className="p-0 w-80">
+          <SheetTitle className="sr-only">Navigation</SheetTitle>
+          <SidebarContent isMobile />
         </SheetContent>
-      </Sheet>
+      </AppSheet>
     </>
   )
 }

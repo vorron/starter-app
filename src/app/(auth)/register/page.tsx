@@ -1,7 +1,7 @@
 'use client'
 
 import { RegisterForm } from '@/features/auth/ui/register-form'
-import { useUser } from '@/entities/user/model/user.store'
+import { useUser } from '@/entities/session/model/session.store'
 import { redirect } from 'next/navigation'
 import { useEffect } from 'react'
 import Link from 'next/link'
