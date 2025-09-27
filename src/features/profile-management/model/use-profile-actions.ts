@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useUser } from '@/entities/user/model/user.store'
+import { useUserStore } from '@/entities/user/model/user.store' // Импортируем хранилище
 import { apiClient } from '@/shared/api/client'
 import { AppError, toAppError } from '@/shared/lib/errors'
 
@@ -11,7 +11,10 @@ interface UpdateProfileData {
 export function useProfileActions() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<AppError | null>(null)
-  const { user, updateUser } = useUser()
+  
+  // Правильно получаем пользователя и действия из хранилища
+  const user = useUserStore(state => state.user)
+  const updateUser = useUserStore(state => state.updateUser)
 
   const updateProfile = async (data: UpdateProfileData) => {
     setIsLoading(true)

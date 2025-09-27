@@ -136,7 +136,7 @@ export function toAppError(error: unknown): AppError {
       return new TimeoutError(error.message)
     }
     
-    // Безопасное извлечение field из ошибки
+    // Безопасное извлечение структурированной информации из ошибки
     if (isErrorWithStatus(error)) {
       return new ApiError(
         error.message,
@@ -144,32 +144,59 @@ export function toAppError(error: unknown): AppError {
         typeof error.code === 'string' ? error.code : undefined,
         typeof error.userMessage === 'string' ? error.userMessage : undefined,
         error.details,
-        typeof error.field === 'string' ? error.field : undefined // Извлекаем field
+        typeof error.field === 'string' ? error.field : undefined
       )
     }
 
-    // Проверяем, является ли error объектом с полями
+    // Безопасное приведение через unknown
     if (typeof error === 'object' && error !== null) {
-      const errorObj = error as Record<string, unknown>
+      // Правильное приведение типов
+      const errorObj = error as unknown as Record<string, unknown>
 
-      // Пытаемся извлечь статус и сообщение из различных возможных форматов
-      const status = Number(errorObj.status || errorObj.statusCode || 0)
-      const message = String(errorObj.message || errorObj.error || error.toString())
+      // Извлекаем свойства безопасным способом
+      const status = getNumberProperty(errorObj, 'status') || 
+                    getNumberProperty(errorObj, 'statusCode') || 
+                    0
+      
+      const message = getStringProperty(errorObj, 'message') || 
+                     getStringProperty(errorObj, 'error') || 
+                     error.toString()
 
       if (status > 0) {
         return new ApiError(
           message,
           status,
-          typeof errorObj.code === 'string' ? errorObj.code : undefined,
-          typeof errorObj.userMessage === 'string' ? errorObj.userMessage : undefined,
+          getStringProperty(errorObj, 'code'),
+          getStringProperty(errorObj, 'userMessage'),
           errorObj.details,
-          typeof errorObj.field === 'string' ? errorObj.field : undefined  // Извлекаем field
+          getStringProperty(errorObj, 'field')
         )
       }
     }
 
     return new NetworkError(error.message)
   }
+  
+  // Обработка примитивных типов
+  if (typeof error === 'string') {
+    return new NetworkError(error)
+  }
+  
+  if (typeof error === 'number') {
+    return new ApiError(`Error ${error}`, 0, 'UNKNOWN_ERROR')
+  }
+  
+  return new NetworkError('An unknown error occurred')
+}
 
-  return new NetworkError(String(error))
+// Вспомогательные функции для безопасного извлечения свойств
+function getStringProperty(obj: Record<string, unknown>, prop: string): string | undefined {
+  const value = obj[prop]
+  return typeof value === 'string' ? value : undefined
+}
+
+function getNumberProperty(obj: Record<string, unknown>, prop: string): number | undefined {
+  const value = obj[prop]
+  return typeof value === 'number' ? value : 
+         typeof value === 'string' ? Number(value) : undefined
 }

@@ -5,8 +5,8 @@ import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
 import { Label } from '@/shared/ui/label'
 import { useUser } from '@/entities/user/model/user.store'
-import { useProfileActions } from '../model/use-profile-actions'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar'
+import { useProfileActions } from '../model/use-profile-actions'
 
 export function ProfileForm() {
   const user = useUser()

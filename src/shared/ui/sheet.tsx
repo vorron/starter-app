@@ -28,10 +28,19 @@ const Sheet = ({ open, onOpenChange, children }: SheetProps) => {
     }
   }, [open])
 
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onOpenChange(false)
+    }
+  }
+
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm">
+    <div 
+      className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm"
+      onClick={handleBackdropClick}
+    >
       {children}
     </div>
   )
@@ -50,6 +59,7 @@ const SheetContent = React.forwardRef<
         side === 'right' && "inset-y-0 right-0 h-full w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
         className
       )}
+      onClick={(e) => e.stopPropagation()} // Предотвращаем закрытие при клике на контент
       {...props}
     >
       {children}

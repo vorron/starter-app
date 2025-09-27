@@ -4,6 +4,7 @@ import { User } from './types'
 interface UserState {
   user: User | null
   updateUser: (userData: Partial<User>) => void
+  setUser: (user: User | null) => void
 }
 
 export const useUserStore = create<UserState>((set) => ({
@@ -11,9 +12,11 @@ export const useUserStore = create<UserState>((set) => ({
   updateUser: (userData) => set((state) => ({
     user: state.user ? { ...state.user, ...userData } : null
   })),
+  setUser: (user) => set({ user }),
 }))
 
 export const useUser = () => useUserStore(state => state.user)
 export const useUserActions = () => useUserStore(state => ({
-  updateUser: state.updateUser
+  updateUser: state.updateUser,
+  setUser: state.setUser,
 }))

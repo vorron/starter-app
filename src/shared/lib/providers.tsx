@@ -4,9 +4,10 @@
 import { useEffect, useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { ThemeProvider } from '@/shared/ui/theme-provider'
+
 import { useAuthActions } from '@/entities/session/model/session.store'
-import { isApiError, AppError } from '@/shared/lib/errors'
+import { isApiError } from '@/shared/lib/errors'
+import { ThemeProvider } from '../ui/theme-provider'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({

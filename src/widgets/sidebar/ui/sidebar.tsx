@@ -1,18 +1,10 @@
 'use client'
 
 import { cn } from '@/shared/lib/utils'
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/shared/ui/accordion'
+import { Avatar, AvatarImage, AvatarFallback } from '@/shared/ui/avatar'
 import { Button } from '@/shared/ui/button'
-import { 
-  Sheet, 
-  SheetContent, 
-  SheetTitle 
-} from '@/shared/ui/sheet'
-import { 
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/shared/ui/accordion'
+import { SheetContent, SheetTitle } from '@/shared/ui/sheet'
 import { 
   Home, 
   Users, 
@@ -22,7 +14,8 @@ import {
   Calendar,
   CreditCard,
   X,
-  type LucideIcon
+  type LucideIcon,
+  Sheet
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'

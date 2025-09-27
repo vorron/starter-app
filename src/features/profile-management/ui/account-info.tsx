@@ -6,6 +6,7 @@ import { Button } from '@/shared/ui/button'
 import { Badge } from '@/shared/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card'
 
+
 export function AccountInfo() {
   const user = useUser()
   const { logout } = useAuthActions()
@@ -70,7 +71,7 @@ export function AccountInfo() {
             <div className="space-y-1">
               <p className="text-sm font-medium">Sign out of your account</p>
               <p className="text-sm text-muted-foreground">
-                You'll need to sign in again to access your account
+                You&apos;ll need to sign in again to access your account
               </p>
             </div>
             <Button variant="outline" onClick={logout}>
