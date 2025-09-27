@@ -1,5 +1,5 @@
 // src/shared/lib/query-types.ts
-import { AppError, ApiError, isApiError } from './errors'
+import { AppError, isApiError } from './errors'
 
 // Расширяем типы TanStack Query для лучшей интеграции с нашей системой ошибок
 declare module '@tanstack/react-query' {

@@ -1,7 +1,12 @@
+// src/shared/ui/avatar.tsx
 "use client"
 
 import * as React from "react"
+import Image, { type StaticImageData } from "next/image"
 import { cn } from '@/shared/lib/utils'
+
+// Добавляем fallback изображение (можно создать или использовать data URL)
+const DEFAULT_AVATAR = '/images/avatar-placeholder.png'
 
 const Avatar = React.forwardRef<
   HTMLDivElement,
@@ -18,16 +23,30 @@ const Avatar = React.forwardRef<
 ))
 Avatar.displayName = "Avatar"
 
+interface AvatarImageProps extends Omit<React.ComponentProps<typeof Image>, 'src'> {
+  src?: string | StaticImageData | null
+  alt: string
+}
+
 const AvatarImage = React.forwardRef<
   HTMLImageElement,
-  React.ImgHTMLAttributes<HTMLImageElement>
->(({ className, ...props }, ref) => (
-  <img
-    ref={ref}
-    className={cn("aspect-square h-full w-full", className)}
-    {...props}
-  />
-))
+  AvatarImageProps
+>(({ className, alt, src, ...props }, ref) => {
+  // Используем fallback если src не предоставлен
+  const imageSrc = src || DEFAULT_AVATAR
+  
+  return (
+    <Image
+      ref={ref}
+      className={cn("aspect-square h-full w-full", className)}
+      alt={alt}
+      src={imageSrc}
+      fill
+      style={{ objectFit: "cover" }}
+      {...props}
+    />
+  )
+})
 AvatarImage.displayName = "AvatarImage"
 
 const AvatarFallback = React.forwardRef<

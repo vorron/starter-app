@@ -53,7 +53,7 @@ export function PasswordForm() {
       await changePassword(formData.currentPassword, formData.newPassword)
       setSuccessMessage('Password updated successfully!')
       setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' })
-    } catch (error) {
+    } catch  {
       // Error handled by hook
     }
   }

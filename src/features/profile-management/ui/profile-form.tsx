@@ -4,9 +4,10 @@ import { useState } from 'react'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
 import { Label } from '@/shared/ui/label'
-import { useUser } from '@/entities/user/model/user.store'
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar'
 import { useProfileActions } from '../model/use-profile-actions'
+import { useUser } from '@/entities/session/model/session.store'
 
 export function ProfileForm() {
   const user = useUser()
@@ -25,7 +26,7 @@ export function ProfileForm() {
     try {
       await updateProfile(formData)
       setSuccessMessage('Profile updated successfully!')
-    } catch (error) {
+    } catch {
       // Error handled by hook
     }
   }
@@ -43,7 +44,7 @@ export function ProfileForm() {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="flex items-center space-x-6">
         <Avatar className="h-20 w-20">
-          <AvatarImage src={user?.avatar} alt={user?.name} />
+          <AvatarImage src={user?.avatar} alt={user?.name || 'Profile avatar'} />
           <AvatarFallback className="text-lg">
             {getInitials(user?.name || 'U')}
           </AvatarFallback>

@@ -1,6 +1,7 @@
 'use client'
 
-import { useUser } from '@/entities/user/model/user.store'
+
+import { useUser } from '@/entities/session/model/session.store';
 import { useDashboardStats } from '../model/use-dashboard-stats'
 import { Card, CardHeader, CardTitle, CardContent } from '@/shared/ui/card';
 

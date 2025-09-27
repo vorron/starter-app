@@ -42,7 +42,7 @@ const DropdownMenu = ({ children }: DropdownMenuProps) => {
 const DropdownMenuTrigger = React.forwardRef<
   HTMLButtonElement,
   DropdownMenuTriggerProps
->(({ asChild = false, children, ...props }, ref) => {
+>(({ children, ...props }, ref) => {
   return (
     <button
       ref={ref}
@@ -78,7 +78,7 @@ DropdownMenuContent.displayName = "DropdownMenuContent"
 const DropdownMenuItem = React.forwardRef<
   HTMLDivElement,
   DropdownMenuItemProps
->(({ className, asChild = false, children, ...props }, ref) => {
+>(({ className,  children, ...props }, ref) => {
   return (
     <div
       ref={ref}

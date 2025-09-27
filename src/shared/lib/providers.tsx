@@ -2,7 +2,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClient, QueryCache, MutationCache, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import { useAuthActions } from '@/entities/session/model/session.store'
@@ -11,6 +11,22 @@ import { ThemeProvider } from '../ui/theme-provider'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({
+    queryCache: new QueryCache({
+      onError: (error) => {
+        // Глобальная обработка ошибок запросов
+        console.error('Query error:', error)
+        
+        if (isApiError(error) && error.status === 401) {
+          console.warn('Authentication error detected in query')
+        }
+      },
+    }),
+    mutationCache: new MutationCache({
+      onError: (error) => {
+        // Глобальная обработка ошибок мутаций
+        console.error('Mutation error:', error)
+      },
+    }),
     defaultOptions: {
       queries: {
         staleTime: 5 * 60 * 1000, // 5 минут
@@ -27,15 +43,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
           return failureCount < 2
         },
         refetchOnWindowFocus: process.env.NODE_ENV === 'production',
-        onError: (error) => {
-          // Глобальная обработка ошибок с использованием нашей системы
-          console.error('Query error:', error)
-          
-          if (isApiError(error) && error.status === 401) {
-            // Обработка ошибки аутентификации
-            console.warn('Authentication error detected in query')
-          }
-        },
       },
       mutations: {
         retry: (failureCount, error) => {
@@ -44,9 +51,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
             return false
           }
           return failureCount < 1
-        },
-        onError: (error) => {
-          console.error('Mutation error:', error)
         },
       },
     },

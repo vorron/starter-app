@@ -1,8 +1,8 @@
 'use client'
 
 import { Button } from '@/shared/ui/button'
-import { useUser } from '@/entities/user/model/user.store'
-import { useAuthActions } from '@/entities/session/model/session.store'
+
+import { useAuthActions, useUser } from '@/entities/session/model/session.store'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar'
 import { Bell, Menu, Search } from 'lucide-react'
@@ -55,7 +55,7 @@ export function AppHeader({ onMenuClick }: AppHeaderProps) {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src={user?.avatar} alt={user?.name} />
+                  <AvatarImage src={user?.avatar} alt={user?.name || 'User avatar'} />
                   <AvatarFallback>
                     {getInitials(user?.name || 'U')}
                   </AvatarFallback>

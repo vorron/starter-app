@@ -26,7 +26,7 @@ interface AccordionContentProps {
   className?: string
 }
 
-const Accordion = ({ type = "single", collapsible = false, children, className }: AccordionProps) => {
+const Accordion = ({ children, className }: AccordionProps) => {
   return (
     <div className={cn("w-full", className)}>
       {children}
