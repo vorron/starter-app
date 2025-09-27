@@ -1,64 +1,82 @@
-export interface ApiError {
-  message: string
-  status: number
-  code?: string
-}
+// src/shared/api/client.ts
+import { 
+  AppError, 
+  ApiError, 
+  toAppError,
+  isApiError, 
+  isTimeoutError,
+  isNetworkError
+} from '@/shared/lib/errors'
 
-export class ApiClientError extends Error {
-  public status: number
-  public code?: string
-
-  constructor(message: string, status: number, code?: string) {
-    super(message)
-    this.name = 'ApiClientError'
-    this.status = status
-    this.code = code
-  }
-}
-
-interface RequestOptions extends Omit<RequestInit, 'body'> {
+export interface RequestOptions extends Omit<RequestInit, 'body'> {
   body?: unknown
   timeout?: number
+  skipErrorHandling?: boolean
+  retries?: number
+}
+
+// Конфигурация клиента по умолчанию
+interface ApiClientConfig {
+  baseURL: string
+  timeout: number
+  retries: number
+  headers: Record<string, string>
+}
+
+// Интерфейс для стандартизированного ответа об ошибке от API
+interface ApiErrorResponse {
+  message: string
+  code?: string
+  userMessage?: string
+  details?: unknown
 }
 
 class ApiClient {
-  private baseURL: string
-  private defaultOptions: RequestOptions
+  private config: ApiClientConfig
 
   constructor(baseURL: string = '') {
-    this.baseURL = baseURL
-    this.defaultOptions = {
+    this.config = {
+      baseURL,
       timeout: 10000,
+      retries: 1,
       headers: {
         'Content-Type': 'application/json',
       },
     }
   }
 
+  public configure(config: Partial<ApiClientConfig>) {
+    this.config = { ...this.config, ...config }
+  }
+
   private async request<T>(
     endpoint: string,
-    options: RequestOptions = {}
+    options: RequestOptions = {},
+    retryCount: number = 0
   ): Promise<T> {
     const {
-      timeout = 10000,
+      timeout = this.config.timeout,
       body,
       headers,
+      skipErrorHandling = false,
+      retries = this.config.retries,
       ...fetchOptions
-    } = { ...this.defaultOptions, ...options }
+    } = options
 
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), timeout)
 
     try {
-      const url = `${this.baseURL}${endpoint}`
+      const url = `${this.config.baseURL}${endpoint}`
+      
       const config: RequestInit = {
         ...fetchOptions,
         signal: controller.signal,
         headers: {
-          ...this.defaultOptions.headers,
+          ...this.config.headers,
           ...headers,
         },
-        credentials: 'include', // Для работы с cookies
+        credentials: 'include',
       }
 
       if (body) {
@@ -68,15 +86,24 @@ class ApiClient {
       const response = await fetch(url, config)
       clearTimeout(timeoutId)
 
+      // Обрабатываем HTTP ошибки
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({
-          message: response.statusText,
-        }))
+        let errorData: ApiErrorResponse
+        
+        try {
+          errorData = await response.json() as ApiErrorResponse
+        } catch {
+          errorData = { 
+            message: response.statusText || `HTTP Error ${response.status}` 
+          }
+        }
 
-        throw new ApiClientError(
-          errorData.message || 'API request failed',
+        throw new ApiError(
+          errorData.message,
           response.status,
-          errorData.code
+          errorData.code,
+          errorData.userMessage, // Теперь это string | undefined
+          errorData.details
         )
       }
 
@@ -85,25 +112,47 @@ class ApiClient {
         return undefined as T
       }
 
-      return await response.json()
+      // Парсим JSON
+      try {
+        return await response.json() as T
+      } catch (parseError) {
+        throw new ApiError(
+          'Failed to parse response',
+          500,
+          'PARSE_ERROR'
+        )
+      }
     } catch (error) {
       clearTimeout(timeoutId)
+
+      // Преобразуем неизвестную ошибку в AppError
+      const appError = toAppError(error)
+
+      // Логика повторных попыток для сетевых ошибок
+      if (retryCount < retries && shouldRetry(appError)) {
+        console.warn(`Retrying request (${retryCount + 1}/${retries})`)
+        return this.request<T>(endpoint, options, retryCount + 1)
+      }
+
+      // Пробрасываем ошибку дальше
+      if (!skipErrorHandling) {
+        this.handleGlobalError(appError)
+      }
       
-      if (error instanceof ApiClientError) {
-        throw error
-      }
-
-      if (error.name === 'AbortError') {
-        throw new ApiClientError('Request timeout', 408)
-      }
-
-      throw new ApiClientError(
-        error instanceof Error ? error.message : 'Network error',
-        0
-      )
+      throw appError
     }
   }
 
+  private handleGlobalError(error: AppError) {
+    // Глобальная обработка ошибок
+    console.error('API Error:', error)
+    
+    if (isApiError(error) && error.status === 401) {
+      // Перенаправление на логин будет в компонентах
+    }
+  }
+
+  // Публичные методы API
   public get<T>(endpoint: string, options?: RequestOptions): Promise<T> {
     return this.request<T>(endpoint, { ...options, method: 'GET' })
   }
@@ -125,4 +174,11 @@ class ApiClient {
   }
 }
 
+// Вспомогательная функция для определения необходимости повторной попытки
+function shouldRetry(error: AppError): boolean {
+  return isNetworkError(error) || isTimeoutError(error) || 
+         (isApiError(error) && error.status >= 500)
+}
+
+// Создаем и экспортируем инстанс клиента
 export const apiClient = new ApiClient(process.env.NEXT_PUBLIC_API_URL)

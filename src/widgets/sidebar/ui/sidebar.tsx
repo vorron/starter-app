@@ -1,0 +1,201 @@
+'use client'
+
+import { cn } from '@/shared/lib/utils'
+import { Button } from '@/shared/ui/button'
+import { 
+  Sheet, 
+  SheetContent, 
+  SheetTitle 
+} from '@/shared/ui/sheet'
+import { 
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/shared/ui/accordion'
+import { 
+  Home, 
+  Users, 
+  Settings, 
+  FileText, 
+  BarChart3, 
+  Calendar,
+  CreditCard,
+  X,
+  type LucideIcon
+} from 'lucide-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+
+interface NavItem {
+  title: string
+  href: string
+  icon: LucideIcon
+  children?: NavItem[]
+}
+
+interface AppSidebarProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}
+
+const navigation: NavItem[] = [
+  {
+    title: 'Dashboard',
+    href: '/dashboard',
+    icon: Home,
+  },
+  {
+    title: 'Projects',
+    href: '/projects',
+    icon: FileText,
+    children: [
+      { title: 'All Projects', href: '/projects', icon: FileText },
+      { title: 'Templates', href: '/projects/templates', icon: FileText },
+    ],
+  },
+  {
+    title: 'Team',
+    href: '/team',
+    icon: Users,
+  },
+  {
+    title: 'Analytics',
+    href: '/analytics',
+    icon: BarChart3,
+  },
+  {
+    title: 'Calendar',
+    href: '/calendar',
+    icon: Calendar,
+  },
+  {
+    title: 'Billing',
+    href: '/billing',
+    icon: CreditCard,
+  },
+  {
+    title: 'Settings',
+    href: '/settings',
+    icon: Settings,
+    children: [
+      { title: 'Profile', href: '/profile', icon: Users },
+      { title: 'Team Settings', href: '/settings/team', icon: Settings },
+      { title: 'Billing', href: '/settings/billing', icon: CreditCard },
+    ],
+  },
+]
+
+function SidebarContent({ isMobile = false }: { isMobile?: boolean }) {
+  const pathname = usePathname()
+
+  const renderNavItem = (item: NavItem, level = 0) => {
+    const isActive = pathname === item.href
+    const hasChildren = item.children && item.children.length > 0
+
+    if (hasChildren) {
+      return (
+        <Accordion type="single" collapsible className="w-full">
+          <AccordionItem value={item.title} className="border-none">
+            <AccordionTrigger className={cn(
+              "py-2 hover:no-underline",
+              level > 0 && "pl-8"
+            )}>
+              <div className="flex items-center space-x-3">
+                <item.icon className="h-4 w-4" />
+                <span>{item.title}</span>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="space-y-1 mt-1">
+                {item.children!.map((child) => renderNavItem(child, level + 1))}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      )
+    }
+
+    return (
+      <Link
+        key={item.href}
+        href={item.href}
+        className={cn(
+          "flex items-center space-x-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent",
+          isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground",
+          level > 0 && "pl-8",
+          isMobile ? "text-base" : "text-sm"
+        )}
+      >
+        <item.icon className="h-4 w-4" />
+        <span>{item.title}</span>
+      </Link>
+    )
+  }
+
+  return (
+    <div className={cn(
+      "flex h-full flex-col bg-background",
+      !isMobile && "w-64 border-r"
+    )}>
+      {/* Logo */}
+      <div className="flex h-16 items-center border-b px-6">
+        <Link href="/dashboard" className="flex items-center space-x-2">
+          <div className="h-6 w-6 rounded-lg bg-primary"></div>
+          <span className="text-lg font-semibold">FSD App</span>
+        </Link>
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 space-y-2 p-4">
+        {navigation.map((item) => (
+          <div key={item.href}>
+            {renderNavItem(item)}
+          </div>
+        ))}
+      </nav>
+
+      {/* User info footer */}
+      <div className="border-t p-4">
+        <div className="flex items-center space-x-3">
+          <Avatar className="h-8 w-8">
+            <AvatarImage src="" />
+            <AvatarFallback>U</AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium truncate">User Name</p>
+            <p className="text-xs text-muted-foreground truncate">Free Plan</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function AppSidebar({ open, onOpenChange }: AppSidebarProps) {
+  return (
+    <>
+      {/* Desktop Sidebar */}
+      <div className="hidden md:flex">
+        <SidebarContent />
+      </div>
+
+      {/* Mobile Sheet */}
+      <Sheet open={open} onOpenChange={onOpenChange}>
+        <SheetContent side="left" className="p-0 w-64">
+          <div className="flex items-center justify-between h-16 px-6 border-b">
+            <SheetTitle className="text-lg font-semibold">Menu</SheetTitle>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => onOpenChange(false)}
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
+          <SidebarContent isMobile={true} />
+        </SheetContent>
+      </Sheet>
+    </>
+  )
+}
