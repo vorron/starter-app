@@ -1,6 +1,7 @@
 'use client'
 
 import { useAuthLoading, useUser } from '@/entities/session/model/session.store'
+import { LoadingSpinner } from '@/shared/ui/loading-spinner'
 import { redirect } from 'next/navigation'
 import { useEffect } from 'react'
 
@@ -20,7 +21,7 @@ export function RequireAuth({ children, fallback }: RequireAuthProps) {
   }, [user, isLoading])
 
   if (isLoading) {
-    return fallback || <div>Loading...</div>
+    return fallback || <LoadingSpinner />;
   }
 
   if (!user) {

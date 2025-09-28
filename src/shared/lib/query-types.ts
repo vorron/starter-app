@@ -1,4 +1,3 @@
-// src/shared/lib/query-types.ts
 import { AppError, isApiError } from './errors'
 
 // Расширяем типы TanStack Query для лучшей интеграции с нашей системой ошибок

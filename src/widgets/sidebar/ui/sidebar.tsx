@@ -1,4 +1,3 @@
-// Полная версия sidebar.tsx
 'use client'
 
 import { cn } from '@/shared/lib/cn'

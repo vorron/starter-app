@@ -1,4 +1,3 @@
-// src/features/profile-management/model/use-profile-actions.ts
 import { useState } from 'react'
 import { useSessionStore } from '@/entities/session/model/session.store' // Исправить импорт
 import { apiClient } from '@/shared/api/client'

@@ -1,4 +1,3 @@
-// src/shared/lib/config.ts (расширенная версия)
 class AppConfig {
   private requiredEnvVars = ['NEXT_PUBLIC_API_URL'] as const;
 

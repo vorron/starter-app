@@ -1,4 +1,3 @@
-// src/shared/ui/avatar.tsx
 "use client"
 
 import * as React from "react"
