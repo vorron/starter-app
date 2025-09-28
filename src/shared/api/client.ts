@@ -1,5 +1,6 @@
 import { ApiError, toAppError, isApiError } from "@/shared/lib/errors";
 import { config } from "@/shared/lib/config";
+import { authApi } from "./endpoints/auth";
 
 export interface RequestOptions extends Omit<RequestInit, "body"> {
   body?: unknown;
@@ -13,8 +14,18 @@ interface ApiClientConfig {
   maxRetries: number;
 }
 
+interface ApiErrorResponse {
+  message: string;
+  code?: string;
+  userMessage?: string;
+  details?: unknown;
+  field?: string;
+}
+
 class ApiClient {
   private config: ApiClientConfig;
+  private isRefreshing = false;
+  private refreshSubscribers: ((token: string | null) => void)[] = [];
 
   constructor(customConfig?: Partial<ApiClientConfig>) {
     this.config = {
@@ -34,11 +45,11 @@ class ApiClient {
     options: RequestOptions = {},
     retryCount: number = 0
   ): Promise<T> {
-    const {
-      timeout = this.config.timeout,
-      body,
+    const { 
+      timeout = this.config.timeout, 
+      body, 
       retryCount: maxRetries = this.config.maxRetries,
-      ...fetchOptions
+      ...fetchOptions 
     } = options;
 
     const controller = new AbortController();
@@ -46,6 +57,7 @@ class ApiClient {
 
     try {
       const url = `${this.config.baseURL}${endpoint}`;
+      
       const config: RequestInit = {
         ...fetchOptions,
         signal: controller.signal,
@@ -63,13 +75,30 @@ class ApiClient {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        let errorData: { message: string; code?: string; userMessage?: string };
+        // Handle 401 errors with token refresh
+        if (response.status === 401 && 
+            endpoint !== '/auth/refresh' && 
+            retryCount === 0 && 
+            !this.isRefreshing) {
+          try {
+            await this.handleAuthError(options);
+            // Retry the original request with new token
+            return this.request<T>(endpoint, options, retryCount + 1);
+          } catch (refreshError) {
+            // If refresh fails, trigger global logout
+            this.triggerGlobalLogout();
+            throw refreshError;
+          }
+        }
 
+        let errorData: ApiErrorResponse;
         try {
           errorData = await response.json();
         } catch {
           errorData = {
             message: response.statusText || `HTTP Error ${response.status}`,
+            code: `HTTP_${response.status}`,
+            userMessage: this.getDefaultUserMessage(response.status),
           };
         }
 
@@ -77,7 +106,9 @@ class ApiClient {
           errorData.message,
           response.status,
           errorData.code,
-          errorData.userMessage
+          errorData.userMessage,
+          errorData.details,
+          errorData.field
         );
       }
 
@@ -99,11 +130,80 @@ class ApiClient {
     }
   }
 
+  private async handleAuthError(originalRequest: RequestOptions): Promise<void> {
+    if (this.isRefreshing) {
+      // Wait for the ongoing refresh to complete
+      return new Promise((resolve, reject) => {
+        this.subscribeToRefresh((token) => {
+          if (token) {
+            originalRequest.headers = {
+              ...originalRequest.headers,
+              'Authorization': `Bearer ${token}`,
+            };
+            resolve();
+          } else {
+            reject(new ApiError('Authentication failed', 401, 'AUTH_FAILED'));
+          }
+        });
+      });
+    }
+
+    this.isRefreshing = true;
+
+    try {
+      const { accessToken } = await authApi.refreshToken();
+      this.notifyRefreshSubscribers(accessToken);
+      
+      // Update the original request with new token
+      originalRequest.headers = {
+        ...originalRequest.headers,
+        'Authorization': `Bearer ${accessToken}`,
+      };
+    } catch (error) {
+      this.notifyRefreshSubscribers(null);
+      throw error;
+    } finally {
+      this.isRefreshing = false;
+      this.refreshSubscribers = [];
+    }
+  }
+
+  private subscribeToRefresh(callback: (token: string | null) => void) {
+    this.refreshSubscribers.push(callback);
+  }
+
+  private notifyRefreshSubscribers(token: string | null) {
+    this.refreshSubscribers.forEach(callback => callback(token));
+  }
+
+  private triggerGlobalLogout() {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('auth-logout'));
+    }
+  }
+
   private shouldRetry(error: unknown): boolean {
     if (!isApiError(error)) return true;
-
+    
     // Retry on network errors and server errors (5xx)
     return error.status >= 500 || error.status === 0;
+  }
+
+  private getDefaultUserMessage(status: number): string {
+    const messages: Record<number, string> = {
+      400: "Invalid request. Please check your input.",
+      401: "Your session has expired. Please sign in again.",
+      403: "You don't have permission to perform this action.",
+      404: "The requested resource was not found.",
+      409: "This resource already exists.",
+      422: "Validation failed. Please check your input.",
+      429: "Too many requests. Please try again later.",
+      500: "Internal server error. Please try again later.",
+      502: "Bad gateway. Please try again later.",
+      503: "Service unavailable. Please try again later.",
+    };
+    
+    return messages[status] || "An unexpected error occurred. Please try again.";
   }
 
   public get<T = unknown>(

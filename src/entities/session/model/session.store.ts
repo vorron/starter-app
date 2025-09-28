@@ -13,6 +13,7 @@ interface SessionState {
   register: (email: string, password: string, name: string) => Promise<void>;
   checkAuth: () => Promise<void>;
   clearError: () => void;
+  forceLogout: () => void;
   updateUser: (userData: Partial<User>) => void;
 }
 
@@ -65,10 +66,15 @@ export const useSessionStore = create<SessionState>()(
       },
 
       clearError: () => set({ error: null }),
-      
-      updateUser: (userData) => set((state) => ({
-        user: state.user ? { ...state.user, ...userData } : null,
-      })),
+
+      updateUser: (userData) =>
+        set((state) => ({
+          user: state.user ? { ...state.user, ...userData } : null,
+        })),
+
+      forceLogout: () => {
+        set({ user: null, isLoading: false, error: null });
+      },
     }),
     { name: "session-store" }
   )
@@ -77,10 +83,12 @@ export const useSessionStore = create<SessionState>()(
 export const useUser = () => useSessionStore((state) => state.user);
 export const useAuthLoading = () => useSessionStore((state) => state.isLoading);
 export const useAuthError = () => useSessionStore((state) => state.error);
-export const useAuthActions = () => useSessionStore((state) => ({
-  login: state.login,
-  logout: state.logout,
-  register: state.register,
-  checkAuth: state.checkAuth,
-  clearError: state.clearError,
-}));
+export const useAuthActions = () =>
+  useSessionStore((state) => ({
+    login: state.login,
+    logout: state.logout,
+    register: state.register,
+    checkAuth: state.checkAuth,
+    clearError: state.clearError,
+    forceLogout: state.clearError,
+  }));
