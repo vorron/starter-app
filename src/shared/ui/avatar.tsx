@@ -3,7 +3,7 @@
 
 import * as React from "react"
 import Image, { type StaticImageData } from "next/image"
-import { cn } from '@/shared/lib/utils'
+import { cn } from '@/shared/lib/cn'
 
 // Добавляем fallback изображение (можно создать или использовать data URL)
 const DEFAULT_AVATAR = '/images/avatar-placeholder.png'

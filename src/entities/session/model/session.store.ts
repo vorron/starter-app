@@ -52,8 +52,7 @@ export const useSessionStore = create<SessionState>()(
           const userData = await authApi.getMe();
           set({ user: userData, isLoading: false, error: null });
         } catch (error) {
-          const appError = toAppError(error);
-          set({ user: null, isLoading: false, error: appError });
+          set({ user: null, isLoading: false, error: toAppError(error) });
         }
       },
 

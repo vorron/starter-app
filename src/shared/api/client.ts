@@ -1,37 +1,58 @@
-import { ApiError, toAppError } from "@/shared/lib/errors";
+import { ApiError, toAppError, isApiError } from "@/shared/lib/errors";
 import { config } from "@/shared/lib/config";
 
 export interface RequestOptions extends Omit<RequestInit, "body"> {
   body?: unknown;
   timeout?: number;
+  retryCount?: number;
+}
+
+interface ApiClientConfig {
+  baseURL: string;
+  timeout: number;
+  maxRetries: number;
 }
 
 class ApiClient {
-  private baseURL: string;
+  private config: ApiClientConfig;
 
-  constructor(baseURL: string = "") {
-    this.baseURL = baseURL;
+  constructor(customConfig?: Partial<ApiClientConfig>) {
+    this.config = {
+      baseURL: config.apiUrl,
+      timeout: config.apiTimeout,
+      maxRetries: config.apiRetries,
+      ...customConfig,
+    };
+
+    if (!this.config.baseURL && process.env.NODE_ENV !== "test") {
+      console.warn("API baseURL is not configured. Using empty string.");
+    }
   }
 
   private async request<T>(
     endpoint: string,
-    options: RequestOptions = {}
+    options: RequestOptions = {},
+    retryCount: number = 0
   ): Promise<T> {
-    const { timeout = 10000, body, headers, ...fetchOptions } = options;
+    const {
+      timeout = this.config.timeout,
+      body,
+      retryCount: maxRetries = this.config.maxRetries,
+      ...fetchOptions
+    } = options;
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
     try {
-      const url = `${this.baseURL}${endpoint}`;
+      const url = `${this.config.baseURL}${endpoint}`;
       const config: RequestInit = {
         ...fetchOptions,
         signal: controller.signal,
         headers: {
           "Content-Type": "application/json",
-          ...headers,
+          ...fetchOptions.headers,
         },
-        credentials: "include",
       };
 
       if (body) {
@@ -42,25 +63,21 @@ class ApiClient {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        let errorData: {
-          message: string;
-          code?: string;
-          userMessage?: string;
-          details?: unknown;
-        } = { message: response.statusText };
+        let errorData: { message: string; code?: string; userMessage?: string };
 
         try {
           errorData = await response.json();
         } catch {
-          // Ignore JSON parse errors for non-JSON responses
+          errorData = {
+            message: response.statusText || `HTTP Error ${response.status}`,
+          };
         }
 
         throw new ApiError(
-          errorData.message || `HTTP Error ${response.status}`,
+          errorData.message,
           response.status,
           errorData.code,
-          errorData.userMessage,
-          errorData.details
+          errorData.userMessage
         );
       }
 
@@ -68,11 +85,25 @@ class ApiClient {
         return undefined as T;
       }
 
-      return response.json() as T;
+      return await response.json();
     } catch (error) {
       clearTimeout(timeoutId);
+
+      // Retry logic for network errors and 5xx status codes
+      if (retryCount < maxRetries && this.shouldRetry(error)) {
+        console.warn(`Retrying request (${retryCount + 1}/${maxRetries})`);
+        return this.request<T>(endpoint, options, retryCount + 1);
+      }
+
       throw toAppError(error);
     }
+  }
+
+  private shouldRetry(error: unknown): boolean {
+    if (!isApiError(error)) return true;
+
+    // Retry on network errors and server errors (5xx)
+    return error.status >= 500 || error.status === 0;
   }
 
   public get<T = unknown>(
@@ -114,4 +145,4 @@ class ApiClient {
   }
 }
 
-export const apiClient = new ApiClient(config.apiUrl);
+export const apiClient = new ApiClient();

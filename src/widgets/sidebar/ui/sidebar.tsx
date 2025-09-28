@@ -1,7 +1,7 @@
 // Полная версия sidebar.tsx
 'use client'
 
-import { cn } from '@/shared/lib/utils'
+import { cn } from '@/shared/lib/cn'
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/shared/ui/accordion'
 import { Avatar, AvatarImage, AvatarFallback } from '@/shared/ui/avatar'
 import { Button } from '@/shared/ui/button'

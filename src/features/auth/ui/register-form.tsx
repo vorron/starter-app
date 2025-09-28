@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
 import { useAuthActions, useAuthError, useAuthLoading } from '@/entities/session/model/session.store'
-import { emailValidator, passwordValidator } from '@/shared/lib/utils'
+import { emailValidator } from '@/shared/lib/validators'
+import { passwordValidator } from '@/shared/lib/validators'
 
 
 export function RegisterForm() {
