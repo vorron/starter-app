@@ -35,7 +35,7 @@ class ApiClient {
       ...customConfig,
     };
 
-    if (!this.config.baseURL && process.env.NODE_ENV !== 'test') {
+    if (!this.config.baseURL && config.isTest) {
       console.warn('API baseURL is not configured. Using empty string.');
     }
   }

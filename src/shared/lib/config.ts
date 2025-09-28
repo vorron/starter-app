@@ -1,51 +1,46 @@
+import { z } from 'zod';
+
+const envSchema = z.object({
+  NEXT_PUBLIC_API_URL: z.string().url().default('http://localhost:3001/api'),
+  NEXTAUTH_SECRET: z.string().default('your-secret-key-here'),
+  NEXT_PUBLIC_API_RETRIES: z.string().transform(Number).default(2),
+  NEXT_PUBLIC_API_TIMEOUT: z.string().transform(Number).default(10000),
+  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+});
+
 class AppConfig {
-  private requiredEnvVars = ['NEXT_PUBLIC_API_URL'] as const;
+  private readonly env;
 
   constructor() {
-    this.validateEnvironment();
-  }
+    this.env = envSchema.parse(process.env);
 
-  private validateEnvironment(): void {
-    if (typeof window === 'undefined') {
-      // Server-side validation
-      this.requiredEnvVars.forEach((envVar) => {
-        if (!process.env[envVar] && this.isProduction) {
-          throw new Error(`Missing required environment variable: ${envVar}`);
-        }
-      });
+    if (this.isProduction) {
+      if (this.env.NEXTAUTH_SECRET === 'your-secret-key-here') {
+        throw new Error('Change NEXTAUTH_SECRET in production');
+      }
     }
   }
 
-  get apiUrl(): string {
-    const url = process.env.NEXT_PUBLIC_API_URL;
-    if (!url && this.isProduction) {
-      throw new Error('NEXT_PUBLIC_API_URL is required in production');
-    }
-    return url || 'http://localhost:3001/api';
+  get apiUrl() {
+    return this.env.NEXT_PUBLIC_API_URL;
   }
-
-  get isDevelopment(): boolean {
-    return process.env.NODE_ENV === 'development';
+  get apiRetries() {
+    return this.env.NEXT_PUBLIC_API_RETRIES;
   }
-
-  get isProduction(): boolean {
-    return process.env.NODE_ENV === 'production';
+  get apiTimeout() {
+    return this.env.NEXT_PUBLIC_API_TIMEOUT;
   }
-
-  get isTest(): boolean {
-    return process.env.NODE_ENV === 'test';
+  get authSecret() {
+    return this.env.NEXTAUTH_SECRET;
   }
-
-  get apiTimeout(): number {
-    return parseInt(process.env.NEXT_PUBLIC_API_TIMEOUT || '10000', 10);
+  get isDevelopment() {
+    return this.env.NODE_ENV === 'development';
   }
-
-  get apiRetries(): number {
-    return parseInt(process.env.NEXT_PUBLIC_API_RETRIES || '2', 10);
+  get isProduction() {
+    return this.env.NODE_ENV === 'production';
   }
-
-  get logLevel(): string {
-    return process.env.NEXT_PUBLIC_LOG_LEVEL || (this.isProduction ? 'error' : 'debug');
+  get isTest() {
+    return this.env.NODE_ENV === 'test';
   }
 }
 

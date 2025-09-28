@@ -9,6 +9,7 @@ import { isApiError } from '@/shared/lib/errors';
 import { ThemeProvider } from '../ui/theme-provider';
 import { useSessionEvents } from '@/entities/session/model/useSessionEvents';
 import { setupAuthEventListeners } from './auth-events';
+import { config } from './config';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -45,7 +46,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
               // Для сетевых ошибок и серверных ошибок - повторяем до 2 раз
               return failureCount < 2;
             },
-            refetchOnWindowFocus: process.env.NODE_ENV === 'production',
+            refetchOnWindowFocus: config.isProduction,
           },
           mutations: {
             retry: (failureCount, error) => {
@@ -75,7 +76,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         {children}
       </ThemeProvider>
-      {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
+      {config.isDevelopment && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   );
 }
