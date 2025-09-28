@@ -1,24 +1,22 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { RequireAuth } from '@/features/auth/lib/require-auth'
-import { ProfileForm } from '@/features/profile-management/ui/profile-form'
-import { PasswordForm } from '@/features/profile-management/ui/password-form'
-import { AccountInfo } from '@/features/profile-management/ui/account-info'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs'
+import { useState } from 'react';
+import { RequireAuth } from '@/features/auth/lib/require-auth';
+import { ProfileForm } from '@/features/profile-management/ui/profile-form';
+import { PasswordForm } from '@/features/profile-management/ui/password-form';
+import { AccountInfo } from '@/features/profile-management/ui/account-info';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 
 export default function ProfilePage() {
-  const [activeTab, setActiveTab] = useState('profile')
+  const [activeTab, setActiveTab] = useState('profile');
 
   return (
     <RequireAuth>
       <div className="container mx-auto py-8 space-y-8">
         <div className="space-y-2">
           <h1 className="text-3xl font-bold tracking-tight">Profile Settings</h1>
-          <p className="text-muted-foreground">
-            Manage your account settings and preferences
-          </p>
+          <p className="text-muted-foreground">Manage your account settings and preferences</p>
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
@@ -60,9 +58,7 @@ export default function ProfilePage() {
             <Card>
               <CardHeader>
                 <CardTitle>Account Information</CardTitle>
-                <CardDescription>
-                  Overview of your account details and membership
-                </CardDescription>
+                <CardDescription>Overview of your account details and membership</CardDescription>
               </CardHeader>
               <CardContent>
                 <AccountInfo />
@@ -72,5 +68,5 @@ export default function ProfilePage() {
         </Tabs>
       </div>
     </RequireAuth>
-  )
+  );
 }

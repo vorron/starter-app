@@ -1,34 +1,39 @@
-'use client'
+'use client';
 
-import { cn } from '@/shared/lib/cn'
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/shared/ui/accordion'
-import { Avatar, AvatarImage, AvatarFallback } from '@/shared/ui/avatar'
-import { Button } from '@/shared/ui/button'
-import { Sheet as AppSheet, SheetContent, SheetTitle } from '@/shared/ui/sheet'
-import { 
-  Home, 
-  Users, 
-  Settings, 
-  FileText, 
-  BarChart3, 
+import { cn } from '@/shared/lib/cn';
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from '@/shared/ui/accordion';
+import { Avatar, AvatarImage, AvatarFallback } from '@/shared/ui/avatar';
+import { Button } from '@/shared/ui/button';
+import { Sheet as AppSheet, SheetContent, SheetTitle } from '@/shared/ui/sheet';
+import {
+  Home,
+  Users,
+  Settings,
+  FileText,
+  BarChart3,
   Calendar,
   CreditCard,
   X,
   type LucideIcon,
-} from 'lucide-react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+} from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface NavItem {
-  title: string
-  href: string
-  icon: LucideIcon
-  children?: NavItem[]
+  title: string;
+  href: string;
+  icon: LucideIcon;
+  children?: NavItem[];
 }
 
 interface AppSidebarProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
 const navigation: NavItem[] = [
@@ -76,23 +81,20 @@ const navigation: NavItem[] = [
       { title: 'Billing', href: '/settings/billing', icon: CreditCard },
     ],
   },
-]
+];
 
 function SidebarContent({ isMobile = false }: { isMobile?: boolean }) {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   const renderNavItem = (item: NavItem, level = 0) => {
-    const isActive = pathname === item.href
-    const hasChildren = item.children && item.children.length > 0
+    const isActive = pathname === item.href;
+    const hasChildren = item.children && item.children.length > 0;
 
     if (hasChildren) {
       return (
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value={item.title} className="border-none">
-            <AccordionTrigger className={cn(
-              "py-2 hover:no-underline",
-              level > 0 && "pl-8"
-            )}>
+            <AccordionTrigger className={cn('py-2 hover:no-underline', level > 0 && 'pl-8')}>
               <div className="flex items-center space-x-3">
                 <item.icon className="h-4 w-4" />
                 <span>{item.title}</span>
@@ -105,7 +107,7 @@ function SidebarContent({ isMobile = false }: { isMobile?: boolean }) {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-      )
+      );
     }
 
     return (
@@ -113,23 +115,20 @@ function SidebarContent({ isMobile = false }: { isMobile?: boolean }) {
         key={item.href}
         href={item.href}
         className={cn(
-          "flex items-center space-x-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent",
-          isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground",
-          level > 0 && "pl-8",
-          isMobile ? "text-base" : "text-sm"
+          'flex items-center space-x-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent',
+          isActive ? 'bg-accent text-accent-foreground' : 'text-muted-foreground',
+          level > 0 && 'pl-8',
+          isMobile ? 'text-base' : 'text-sm'
         )}
       >
         <item.icon className="h-4 w-4" />
         <span>{item.title}</span>
       </Link>
-    )
-  }
+    );
+  };
 
   return (
-    <div className={cn(
-      "flex h-full flex-col bg-background",
-      !isMobile && "w-64 border-r"
-    )}>
+    <div className={cn('flex h-full flex-col bg-background', !isMobile && 'w-64 border-r')}>
       {/* Logo */}
       <div className="flex items-center justify-between p-4 border-b">
         <div className="flex items-center space-x-2">
@@ -139,16 +138,20 @@ function SidebarContent({ isMobile = false }: { isMobile?: boolean }) {
           <span className="font-semibold">App</span>
         </div>
         {isMobile && (
-          <Button variant="ghost" size="icon" onClick={() => {/* close logic */}}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => {
+              /* close logic */
+            }}
+          >
             <X className="h-4 w-4" />
           </Button>
         )}
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-2 p-4">
-        {navigation.map((item) => renderNavItem(item))}
-      </nav>
+      <nav className="flex-1 space-y-2 p-4">{navigation.map((item) => renderNavItem(item))}</nav>
 
       {/* User section */}
       <div className="p-4 border-t">
@@ -164,7 +167,7 @@ function SidebarContent({ isMobile = false }: { isMobile?: boolean }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export function AppSidebar({ open, onOpenChange }: AppSidebarProps) {
@@ -183,5 +186,5 @@ export function AppSidebar({ open, onOpenChange }: AppSidebarProps) {
         </SheetContent>
       </AppSheet>
     </>
-  )
+  );
 }

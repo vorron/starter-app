@@ -1,66 +1,60 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Button } from '@/shared/ui/button'
-import { Input } from '@/shared/ui/input'
-import { Label } from '@/shared/ui/label'
+import { useState } from 'react';
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar'
-import { useProfileActions } from '../model/use-profile-actions'
-import { useUser } from '@/entities/session/model/session.store'
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
+import { useProfileActions } from '../model/use-profile-actions';
+import { useUser } from '@/entities/session/model/session.store';
 
 export function ProfileForm() {
-  const user = useUser()
-  const { updateProfile, isLoading, error } = useProfileActions()
-  
+  const user = useUser();
+  const { updateProfile, isLoading, error } = useProfileActions();
+
   const [formData, setFormData] = useState({
     name: user?.name || '',
     email: user?.email || '',
-  })
-  const [successMessage, setSuccessMessage] = useState('')
+  });
+  const [successMessage, setSuccessMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setSuccessMessage('')
-    
+    e.preventDefault();
+    setSuccessMessage('');
+
     try {
-      await updateProfile(formData)
-      setSuccessMessage('Profile updated successfully!')
+      await updateProfile(formData);
+      setSuccessMessage('Profile updated successfully!');
     } catch {
       // Error handled by hook
     }
-  }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const getInitials = (name: string) => {
-    return name.split(' ').map(n => n[0]).join('').toUpperCase()
-  }
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase();
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="flex items-center space-x-6">
         <Avatar className="h-20 w-20">
           <AvatarImage src={user?.avatar} alt={user?.name || 'Profile avatar'} />
-          <AvatarFallback className="text-lg">
-            {getInitials(user?.name || 'U')}
-          </AvatarFallback>
+          <AvatarFallback className="text-lg">{getInitials(user?.name || 'U')}</AvatarFallback>
         </Avatar>
         <div className="space-y-2">
           <Label htmlFor="avatar">Profile Picture</Label>
-          <Input
-            id="avatar"
-            type="file"
-            accept="image/*"
-            className="max-w-xs"
-            disabled
-          />
-          <p className="text-sm text-muted-foreground">
-            Avatar upload functionality coming soon
-          </p>
+          <Input id="avatar" type="file" accept="image/*" className="max-w-xs" disabled />
+          <p className="text-sm text-muted-foreground">Avatar upload functionality coming soon</p>
         </div>
       </div>
 
@@ -98,9 +92,7 @@ export function ProfileForm() {
       )}
 
       {successMessage && (
-        <div className="bg-green-50 text-green-700 text-sm p-3 rounded-md">
-          {successMessage}
-        </div>
+        <div className="bg-green-50 text-green-700 text-sm p-3 rounded-md">{successMessage}</div>
       )}
 
       <div className="flex justify-end">
@@ -109,5 +101,5 @@ export function ProfileForm() {
         </Button>
       </div>
     </form>
-  )
+  );
 }

@@ -1,5 +1,5 @@
-import { apiClient } from "../client";
-import { User } from "@/entities/user/model/types";
+import { apiClient } from '../client';
+import { User } from '@/entities/user/model/types';
 
 export interface UpdateProfileData {
   name: string;
@@ -12,9 +12,8 @@ export interface ChangePasswordData {
 }
 
 export const profileApi = {
-  updateProfile: (data: UpdateProfileData): Promise<User> =>
-    apiClient.put("/users/profile", data),
+  updateProfile: (data: UpdateProfileData): Promise<User> => apiClient.put('/users/profile', data),
 
   changePassword: (data: ChangePasswordData): Promise<void> =>
-    apiClient.post("/auth/change-password", data),
+    apiClient.post('/auth/change-password', data),
 };

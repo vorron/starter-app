@@ -1,8 +1,8 @@
-import { ApiError, toAppError, isApiError } from "@/shared/lib/errors";
-import { config } from "@/shared/lib/config";
-import { authApi } from "./endpoints/auth";
+import { ApiError, toAppError, isApiError } from '@/shared/lib/errors';
+import { config } from '@/shared/lib/config';
+import { authApi } from './endpoints/auth';
 
-export interface RequestOptions extends Omit<RequestInit, "body"> {
+export interface RequestOptions extends Omit<RequestInit, 'body'> {
   body?: unknown;
   timeout?: number;
   retryCount?: number;
@@ -35,8 +35,8 @@ class ApiClient {
       ...customConfig,
     };
 
-    if (!this.config.baseURL && process.env.NODE_ENV !== "test") {
-      console.warn("API baseURL is not configured. Using empty string.");
+    if (!this.config.baseURL && process.env.NODE_ENV !== 'test') {
+      console.warn('API baseURL is not configured. Using empty string.');
     }
   }
 
@@ -45,11 +45,11 @@ class ApiClient {
     options: RequestOptions = {},
     retryCount: number = 0
   ): Promise<T> {
-    const { 
-      timeout = this.config.timeout, 
-      body, 
+    const {
+      timeout = this.config.timeout,
+      body,
       retryCount: maxRetries = this.config.maxRetries,
-      ...fetchOptions 
+      ...fetchOptions
     } = options;
 
     const controller = new AbortController();
@@ -57,12 +57,12 @@ class ApiClient {
 
     try {
       const url = `${this.config.baseURL}${endpoint}`;
-      
+
       const config: RequestInit = {
         ...fetchOptions,
         signal: controller.signal,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           ...fetchOptions.headers,
         },
       };
@@ -76,10 +76,12 @@ class ApiClient {
 
       if (!response.ok) {
         // Handle 401 errors with token refresh
-        if (response.status === 401 && 
-            endpoint !== '/auth/refresh' && 
-            retryCount === 0 && 
-            !this.isRefreshing) {
+        if (
+          response.status === 401 &&
+          endpoint !== '/auth/refresh' &&
+          retryCount === 0 &&
+          !this.isRefreshing
+        ) {
           try {
             await this.handleAuthError(options);
             // Retry the original request with new token
@@ -138,7 +140,7 @@ class ApiClient {
           if (token) {
             originalRequest.headers = {
               ...originalRequest.headers,
-              'Authorization': `Bearer ${token}`,
+              Authorization: `Bearer ${token}`,
             };
             resolve();
           } else {
@@ -153,11 +155,11 @@ class ApiClient {
     try {
       const { accessToken } = await authApi.refreshToken();
       this.notifyRefreshSubscribers(accessToken);
-      
+
       // Update the original request with new token
       originalRequest.headers = {
         ...originalRequest.headers,
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       };
     } catch (error) {
       this.notifyRefreshSubscribers(null);
@@ -173,7 +175,7 @@ class ApiClient {
   }
 
   private notifyRefreshSubscribers(token: string | null) {
-    this.refreshSubscribers.forEach(callback => callback(token));
+    this.refreshSubscribers.forEach((callback) => callback(token));
   }
 
   private triggerGlobalLogout() {
@@ -184,56 +186,42 @@ class ApiClient {
 
   private shouldRetry(error: unknown): boolean {
     if (!isApiError(error)) return true;
-    
+
     // Retry on network errors and server errors (5xx)
     return error.status >= 500 || error.status === 0;
   }
 
   private getDefaultUserMessage(status: number): string {
     const messages: Record<number, string> = {
-      400: "Invalid request. Please check your input.",
-      401: "Your session has expired. Please sign in again.",
+      400: 'Invalid request. Please check your input.',
+      401: 'Your session has expired. Please sign in again.',
       403: "You don't have permission to perform this action.",
-      404: "The requested resource was not found.",
-      409: "This resource already exists.",
-      422: "Validation failed. Please check your input.",
-      429: "Too many requests. Please try again later.",
-      500: "Internal server error. Please try again later.",
-      502: "Bad gateway. Please try again later.",
-      503: "Service unavailable. Please try again later.",
+      404: 'The requested resource was not found.',
+      409: 'This resource already exists.',
+      422: 'Validation failed. Please check your input.',
+      429: 'Too many requests. Please try again later.',
+      500: 'Internal server error. Please try again later.',
+      502: 'Bad gateway. Please try again later.',
+      503: 'Service unavailable. Please try again later.',
     };
-    
-    return messages[status] || "An unexpected error occurred. Please try again.";
+
+    return messages[status] || 'An unexpected error occurred. Please try again.';
   }
 
-  public get<T = unknown>(
-    endpoint: string,
-    options?: RequestOptions
-  ): Promise<T> {
-    return this.request<T>(endpoint, { ...options, method: "GET" });
+  public get<T = unknown>(endpoint: string, options?: RequestOptions): Promise<T> {
+    return this.request<T>(endpoint, { ...options, method: 'GET' });
   }
 
-  public post<T = unknown>(
-    endpoint: string,
-    body?: unknown,
-    options?: RequestOptions
-  ): Promise<T> {
-    return this.request<T>(endpoint, { ...options, method: "POST", body });
+  public post<T = unknown>(endpoint: string, body?: unknown, options?: RequestOptions): Promise<T> {
+    return this.request<T>(endpoint, { ...options, method: 'POST', body });
   }
 
-  public put<T = unknown>(
-    endpoint: string,
-    body?: unknown,
-    options?: RequestOptions
-  ): Promise<T> {
-    return this.request<T>(endpoint, { ...options, method: "PUT", body });
+  public put<T = unknown>(endpoint: string, body?: unknown, options?: RequestOptions): Promise<T> {
+    return this.request<T>(endpoint, { ...options, method: 'PUT', body });
   }
 
-  public delete<T = unknown>(
-    endpoint: string,
-    options?: RequestOptions
-  ): Promise<T> {
-    return this.request<T>(endpoint, { ...options, method: "DELETE" });
+  public delete<T = unknown>(endpoint: string, options?: RequestOptions): Promise<T> {
+    return this.request<T>(endpoint, { ...options, method: 'DELETE' });
   }
 
   public patch<T = unknown>(
@@ -241,7 +229,7 @@ class ApiClient {
     body?: unknown,
     options?: RequestOptions
   ): Promise<T> {
-    return this.request<T>(endpoint, { ...options, method: "PATCH", body });
+    return this.request<T>(endpoint, { ...options, method: 'PATCH', body });
   }
 }
 

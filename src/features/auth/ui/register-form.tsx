@@ -1,86 +1,89 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Button } from '@/shared/ui/button'
-import { Input } from '@/shared/ui/input'
-import { useAuthActions, useAuthError, useAuthLoading } from '@/entities/session/model/session.store'
-import { emailValidator } from '@/shared/lib/validators'
-import { passwordValidator } from '@/shared/lib/validators'
-
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/input';
+import {
+  useAuthActions,
+  useAuthError,
+  useAuthLoading,
+} from '@/entities/session/model/session.store';
+import { emailValidator } from '@/shared/lib/validators';
+import { passwordValidator } from '@/shared/lib/validators';
 
 export function RegisterForm() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    confirmPassword: ''
-  })
-  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({})
-  
-  const { register } = useAuthActions()
-  const error = useAuthError()
-  const isLoading = useAuthLoading()
-  const router = useRouter()
+    confirmPassword: '',
+  });
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+
+  const { register } = useAuthActions();
+  const error = useAuthError();
+  const isLoading = useAuthLoading();
+  const router = useRouter();
 
   const validateForm = () => {
-    const errors: Record<string, string> = {}
+    const errors: Record<string, string> = {};
 
     if (!formData.name.trim()) {
-      errors.name = 'Name is required'
+      errors.name = 'Name is required';
     } else if (formData.name.trim().length < 2) {
-      errors.name = 'Name must be at least 2 characters'
+      errors.name = 'Name must be at least 2 characters';
     }
 
     if (!formData.email.trim()) {
-      errors.email = 'Email is required'
+      errors.email = 'Email is required';
     } else if (!emailValidator(formData.email)) {
-      errors.email = 'Please enter a valid email address'
+      errors.email = 'Please enter a valid email address';
     }
 
     if (!formData.password) {
-      errors.password = 'Password is required'
+      errors.password = 'Password is required';
     } else if (!passwordValidator(formData.password)) {
-      errors.password = 'Password must be at least 6 characters'
+      errors.password = 'Password must be at least 6 characters';
     }
 
     if (!formData.confirmPassword) {
-      errors.confirmPassword = 'Please confirm your password'
+      errors.confirmPassword = 'Please confirm your password';
     } else if (formData.password !== formData.confirmPassword) {
-      errors.confirmPassword = 'Passwords do not match'
+      errors.confirmPassword = 'Passwords do not match';
     }
 
-    setValidationErrors(errors)
-    return Object.keys(errors).length === 0
-  }
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-    
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
     // Clear validation error when user starts typing
     if (validationErrors[name]) {
-      setValidationErrors(prev => ({ ...prev, [name]: '' }))
+      setValidationErrors((prev) => ({ ...prev, [name]: '' }));
     }
-  }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     if (!validateForm()) {
-      return
+      return;
     }
 
     try {
-      await register(formData.email, formData.password, formData.name)
-      router.push('/dashboard')
-    } catch  {
+      await register(formData.email, formData.password, formData.name);
+      router.push('/dashboard');
+    } catch {
       // Error handled by store
     }
-  }
+  };
 
-  const getFieldError = (fieldName: string) => 
-    validationErrors[fieldName] || (error?.field === fieldName ? error.message : '')
+  const getFieldError = (fieldName: string) =>
+    validationErrors[fieldName] || (error?.field === fieldName ? error.message : '');
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -89,7 +92,7 @@ export function RegisterForm() {
           {error.userMessage || error.message}
         </div>
       )}
-      
+
       <div className="space-y-2">
         <label htmlFor="name" className="text-sm font-medium">
           Full Name
@@ -109,7 +112,7 @@ export function RegisterForm() {
           <p className="text-destructive text-xs">{getFieldError('name')}</p>
         )}
       </div>
-      
+
       <div className="space-y-2">
         <label htmlFor="email" className="text-sm font-medium">
           Email Address
@@ -129,7 +132,7 @@ export function RegisterForm() {
           <p className="text-destructive text-xs">{getFieldError('email')}</p>
         )}
       </div>
-      
+
       <div className="space-y-2">
         <label htmlFor="password" className="text-sm font-medium">
           Password
@@ -149,7 +152,7 @@ export function RegisterForm() {
           <p className="text-destructive text-xs">{getFieldError('password')}</p>
         )}
       </div>
-      
+
       <div className="space-y-2">
         <label htmlFor="confirmPassword" className="text-sm font-medium">
           Confirm Password
@@ -169,10 +172,10 @@ export function RegisterForm() {
           <p className="text-destructive text-xs">{getFieldError('confirmPassword')}</p>
         )}
       </div>
-      
+
       <Button type="submit" className="w-full" disabled={isLoading}>
         {isLoading ? 'Creating account...' : 'Create account'}
       </Button>
     </form>
-  )
+  );
 }

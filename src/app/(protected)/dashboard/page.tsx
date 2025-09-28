@@ -1,4 +1,4 @@
-import { DashboardStats } from '@/widgets/dashboard-stats/ui/dashboard-stats'
+import { DashboardStats } from '@/widgets/dashboard-stats/ui/dashboard-stats';
 
 export default function DashboardPage() {
   return (
@@ -9,5 +9,5 @@ export default function DashboardPage() {
       </div>
       <DashboardStats />
     </div>
-  )
+  );
 }

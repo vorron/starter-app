@@ -27,38 +27,38 @@ export abstract class AppError extends Error {
 
   private getDefaultUserMessage(status: number): string {
     const messages: Record<number, string> = {
-      400: "Invalid request. Please check your input.",
-      401: "Authentication required. Please sign in.",
+      400: 'Invalid request. Please check your input.',
+      401: 'Authentication required. Please sign in.',
       403: "You don't have permission to perform this action.",
-      404: "The requested resource was not found.",
-      409: "This resource already exists.",
-      422: "Validation failed. Please check your input.",
-      429: "Too many requests. Please try again later.",
-      500: "Internal server error. Please try again later.",
-      502: "Bad gateway. Please try again later.",
-      503: "Service unavailable. Please try again later.",
+      404: 'The requested resource was not found.',
+      409: 'This resource already exists.',
+      422: 'Validation failed. Please check your input.',
+      429: 'Too many requests. Please try again later.',
+      500: 'Internal server error. Please try again later.',
+      502: 'Bad gateway. Please try again later.',
+      503: 'Service unavailable. Please try again later.',
     };
-    return messages[status] || "An unexpected error occurred. Please try again.";
+    return messages[status] || 'An unexpected error occurred. Please try again.';
   }
 }
 
 // Specific error types
 export class NetworkError extends AppError {
-  constructor(message: string = "Network error occurred") {
+  constructor(message: string = 'Network error occurred') {
     super(message, {
-      code: "NETWORK_ERROR",
+      code: 'NETWORK_ERROR',
       status: 0,
-      userMessage: "Please check your internet connection and try again.",
+      userMessage: 'Please check your internet connection and try again.',
     });
   }
 }
 
 export class TimeoutError extends AppError {
-  constructor(message: string = "Request timeout") {
+  constructor(message: string = 'Request timeout') {
     super(message, {
-      code: "TIMEOUT_ERROR",
+      code: 'TIMEOUT_ERROR',
       status: 408,
-      userMessage: "Request timed out. Please try again.",
+      userMessage: 'Request timed out. Please try again.',
     });
   }
 }
@@ -67,7 +67,7 @@ export class ApiError extends AppError {
   constructor(
     message: string,
     public readonly status: number,
-    code: string = "API_ERROR",
+    code: string = 'API_ERROR',
     userMessage?: string,
     details?: unknown,
     field?: string
@@ -79,7 +79,7 @@ export class ApiError extends AppError {
 export class ValidationError extends AppError {
   constructor(message: string, field?: string) {
     super(message, {
-      code: "VALIDATION_ERROR",
+      code: 'VALIDATION_ERROR',
       status: 400,
       userMessage: field ? `Field "${field}": ${message}` : `Validation error: ${message}`,
       field,
@@ -134,7 +134,7 @@ function isErrorLike(error: unknown): error is { message: string; name?: string 
   if (typeof error !== 'object' || error === null) {
     return false;
   }
-  
+
   const potentialError = error as { message: unknown };
   return typeof potentialError.message === 'string';
 }
@@ -142,14 +142,14 @@ function isErrorLike(error: unknown): error is { message: string; name?: string 
 // Safe property access functions
 function getSafeStringProperty(obj: unknown, prop: string): string | undefined {
   if (typeof obj !== 'object' || obj === null) return undefined;
-  
+
   const value = (obj as Record<string, unknown>)[prop];
   return typeof value === 'string' ? value : undefined;
 }
 
 function getSafeNumberProperty(obj: unknown, prop: string): number | undefined {
   if (typeof obj !== 'object' || obj === null) return undefined;
-  
+
   const value = (obj as Record<string, unknown>)[prop];
   if (typeof value === 'number') return value;
   if (typeof value === 'string') {
@@ -179,18 +179,19 @@ export function toAppError(error: unknown): AppError {
     }
 
     // Check if it's a network error
-    if (error.message.includes('Failed to fetch') || 
-        error.message.includes('Network request failed') ||
-        error.name === 'TypeError' && error.message.includes('fetch')) {
+    if (
+      error.message.includes('Failed to fetch') ||
+      error.message.includes('Network request failed') ||
+      (error.name === 'TypeError' && error.message.includes('fetch'))
+    ) {
       return new NetworkError(error.message);
     }
 
     // Try to extract structured error information from the error object
-    const status = getSafeNumberProperty(error, 'status') || 
-                   getSafeNumberProperty(error, 'statusCode') || 0;
-    
-    const message = getSafeStringProperty(error, 'message') || 
-                    error.message;
+    const status =
+      getSafeNumberProperty(error, 'status') || getSafeNumberProperty(error, 'statusCode') || 0;
+
+    const message = getSafeStringProperty(error, 'message') || error.message;
 
     if (status > 0) {
       return new ApiError(
@@ -245,8 +246,8 @@ export function createValidationError(message: string, field?: string): Validati
 }
 
 export function createApiError(
-  message: string, 
-  status: number, 
+  message: string,
+  status: number,
   options?: { code?: string; userMessage?: string; details?: unknown; field?: string }
 ): ApiError {
   return new ApiError(

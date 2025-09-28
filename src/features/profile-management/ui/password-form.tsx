@@ -1,40 +1,38 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
-import { useProfileActions } from "../model/use-profile-actions";
+import { useState } from 'react';
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
+import { useProfileActions } from '../model/use-profile-actions';
 
 export function PasswordForm() {
   const { changePassword, isLoading, error } = useProfileActions();
   const [formData, setFormData] = useState({
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
   });
-  const [successMessage, setSuccessMessage] = useState("");
-  const [validationErrors, setValidationErrors] = useState<
-    Record<string, string>
-  >({});
+  const [successMessage, setSuccessMessage] = useState('');
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   const validateForm = () => {
     const errors: Record<string, string> = {};
 
     if (!formData.currentPassword) {
-      errors.currentPassword = "Current password is required";
+      errors.currentPassword = 'Current password is required';
     }
 
     if (!formData.newPassword) {
-      errors.newPassword = "New password is required";
+      errors.newPassword = 'New password is required';
     } else if (formData.newPassword.length < 6) {
-      errors.newPassword = "Password must be at least 6 characters";
+      errors.newPassword = 'Password must be at least 6 characters';
     }
 
     if (!formData.confirmPassword) {
-      errors.confirmPassword = "Please confirm your password";
+      errors.confirmPassword = 'Please confirm your password';
     } else if (formData.newPassword !== formData.confirmPassword) {
-      errors.confirmPassword = "Passwords do not match";
+      errors.confirmPassword = 'Passwords do not match';
     }
 
     setValidationErrors(errors);
@@ -43,7 +41,7 @@ export function PasswordForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSuccessMessage("");
+    setSuccessMessage('');
     setValidationErrors({});
 
     if (!validateForm()) {
@@ -56,11 +54,11 @@ export function PasswordForm() {
         currentPassword: formData.currentPassword,
         newPassword: formData.newPassword,
       });
-      setSuccessMessage("Password updated successfully!");
+      setSuccessMessage('Password updated successfully!');
       setFormData({
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
       });
     } catch {
       // Error handled by hook
@@ -72,7 +70,7 @@ export function PasswordForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
 
     if (validationErrors[name]) {
-      setValidationErrors((prev) => ({ ...prev, [name]: "" }));
+      setValidationErrors((prev) => ({ ...prev, [name]: '' }));
     }
   };
 
@@ -89,14 +87,10 @@ export function PasswordForm() {
             onChange={handleChange}
             placeholder="Enter current password"
             disabled={isLoading}
-            className={
-              validationErrors.currentPassword ? "border-destructive" : ""
-            }
+            className={validationErrors.currentPassword ? 'border-destructive' : ''}
           />
           {validationErrors.currentPassword && (
-            <p className="text-destructive text-sm">
-              {validationErrors.currentPassword}
-            </p>
+            <p className="text-destructive text-sm">{validationErrors.currentPassword}</p>
           )}
         </div>
 
@@ -110,12 +104,10 @@ export function PasswordForm() {
             onChange={handleChange}
             placeholder="Enter new password"
             disabled={isLoading}
-            className={validationErrors.newPassword ? "border-destructive" : ""}
+            className={validationErrors.newPassword ? 'border-destructive' : ''}
           />
           {validationErrors.newPassword && (
-            <p className="text-destructive text-sm">
-              {validationErrors.newPassword}
-            </p>
+            <p className="text-destructive text-sm">{validationErrors.newPassword}</p>
           )}
         </div>
 
@@ -129,14 +121,10 @@ export function PasswordForm() {
             onChange={handleChange}
             placeholder="Confirm new password"
             disabled={isLoading}
-            className={
-              validationErrors.confirmPassword ? "border-destructive" : ""
-            }
+            className={validationErrors.confirmPassword ? 'border-destructive' : ''}
           />
           {validationErrors.confirmPassword && (
-            <p className="text-destructive text-sm">
-              {validationErrors.confirmPassword}
-            </p>
+            <p className="text-destructive text-sm">{validationErrors.confirmPassword}</p>
           )}
         </div>
       </div>
@@ -148,14 +136,12 @@ export function PasswordForm() {
       )}
 
       {successMessage && (
-        <div className="bg-green-50 text-green-700 text-sm p-3 rounded-md">
-          {successMessage}
-        </div>
+        <div className="bg-green-50 text-green-700 text-sm p-3 rounded-md">{successMessage}</div>
       )}
 
       <div className="flex justify-end">
         <Button type="submit" disabled={isLoading}>
-          {isLoading ? "Updating..." : "Change Password"}
+          {isLoading ? 'Updating...' : 'Change Password'}
         </Button>
       </div>
     </form>

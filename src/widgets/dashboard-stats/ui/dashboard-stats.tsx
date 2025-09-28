@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useUser } from "@/entities/session/model/session.store";
-import { useDashboardStats } from "../model/use-dashboard-stats";
-import { Card, CardHeader, CardTitle, CardContent } from "@/shared/ui/card";
+import { useUser } from '@/entities/session/model/session.store';
+import { useDashboardStats } from '../model/use-dashboard-stats';
+import { Card, CardHeader, CardTitle, CardContent } from '@/shared/ui/card';
 
 function StatCard({
   title,
@@ -23,9 +23,7 @@ function StatCard({
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">{value}</div>
-        {subtitle && (
-          <p className="text-xs text-muted-foreground">{subtitle}</p>
-        )}
+        {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
       </CardContent>
     </Card>
   );
@@ -74,9 +72,7 @@ export function DashboardStats() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight">
-          Welcome back, {user?.name}!
-        </h2>
+        <h2 className="text-2xl font-bold tracking-tight">Welcome back, {user?.name}!</h2>
         <p className="text-muted-foreground">
           Here&apos;s what&apos;s happening with your projects today.
         </p>

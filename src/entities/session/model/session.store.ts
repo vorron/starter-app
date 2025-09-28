@@ -1,8 +1,8 @@
-import { create } from "zustand";
-import { devtools } from "zustand/middleware";
-import { User } from "@/entities/user/model/types";
-import { authApi } from "@/shared/api/endpoints/auth";
-import { AppError, toAppError } from "@/shared/lib/errors";
+import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
+import { User } from '@/entities/user/model/types';
+import { authApi } from '@/shared/api/endpoints/auth';
+import { AppError, toAppError } from '@/shared/lib/errors';
 
 interface SessionState {
   user: User | null;
@@ -76,7 +76,7 @@ export const useSessionStore = create<SessionState>()(
         set({ user: null, isLoading: false, error: null });
       },
     }),
-    { name: "session-store" }
+    { name: 'session-store' }
   )
 );
 

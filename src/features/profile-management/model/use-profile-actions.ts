@@ -1,10 +1,6 @@
-import { useState } from "react";
-import {
-  ChangePasswordData,
-  profileApi,
-  UpdateProfileData,
-} from "@/shared/api/endpoints/profile";
-import { AppError, toAppError } from "@/shared/lib/errors";
+import { useState } from 'react';
+import { ChangePasswordData, profileApi, UpdateProfileData } from '@/shared/api/endpoints/profile';
+import { AppError, toAppError } from '@/shared/lib/errors';
 
 export function useProfileActions() {
   const [isLoading, setIsLoading] = useState(false);

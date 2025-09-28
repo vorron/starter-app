@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { useSessionStore } from "./session.store";
+import { useEffect } from 'react';
+import { useSessionStore } from './session.store';
 
 export const useSessionEvents = () => {
   const forceLogout = useSessionStore((state) => state.forceLogout);
@@ -9,7 +9,7 @@ export const useSessionEvents = () => {
       forceLogout();
     };
 
-    window.addEventListener("force-logout", handleForceLogout);
-    return () => window.removeEventListener("force-logout", handleForceLogout);
+    window.addEventListener('force-logout', handleForceLogout);
+    return () => window.removeEventListener('force-logout', handleForceLogout);
   }, [forceLogout]);
 };

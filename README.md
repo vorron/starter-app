@@ -49,5 +49,3 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 Реализуйте rate limiting
 
 Добавьте метрики производительности
-
-

@@ -8,7 +8,7 @@ class AppConfig {
   private validateEnvironment(): void {
     if (typeof window === 'undefined') {
       // Server-side validation
-      this.requiredEnvVars.forEach(envVar => {
+      this.requiredEnvVars.forEach((envVar) => {
         if (!process.env[envVar] && this.isProduction) {
           throw new Error(`Missing required environment variable: ${envVar}`);
         }

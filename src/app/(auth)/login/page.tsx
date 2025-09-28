@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import { LoginForm } from '@/features/auth/ui/login-form'
-import { useUser } from '@/entities/session/model/session.store'
-import { redirect } from 'next/navigation'
-import { useEffect } from 'react'
+import { LoginForm } from '@/features/auth/ui/login-form';
+import { useUser } from '@/entities/session/model/session.store';
+import { redirect } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function LoginPage() {
-  const user = useUser()
+  const user = useUser();
 
   useEffect(() => {
     if (user) {
-      redirect('/dashboard')
+      redirect('/dashboard');
     }
-  }, [user])
+  }, [user]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
@@ -26,5 +26,5 @@ export default function LoginPage() {
         <LoginForm />
       </div>
     </div>
-  )
+  );
 }
