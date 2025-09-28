@@ -1,9 +1,11 @@
-// src/shared/lib/config.ts
 class AppConfig {
   get apiUrl(): string {
     const url = process.env.NEXT_PUBLIC_API_URL
     if (!url) {
-      throw new Error('NEXT_PUBLIC_API_URL is not defined')
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('NEXT_PUBLIC_API_URL is not defined, using fallback')
+      }
+      return 'http://localhost:3000/api'
     }
     return url
   }

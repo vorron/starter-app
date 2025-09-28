@@ -1,89 +1,93 @@
-// Базовый класс для всех ошибок приложения
+// Base error class with proper typing
 export abstract class AppError extends Error {
-  abstract readonly code: string;
-  abstract readonly status: number;
-  abstract readonly userMessage: string;
-  public readonly field?: string; // Добавляем опциональное поле
-
-  constructor(message: string, field?: string) {
-    super(message);
-    this.name = this.constructor.name;
-    this.field = field;
-  }
-}
-
-// Сетевые ошибки
-export class NetworkError extends AppError {
-  readonly code = "NETWORK_ERROR";
-  readonly status = 0;
-  readonly userMessage = "Проблемы с соединением. Проверьте интернет.";
-
-  constructor(message: string = "Network error occurred") {
-    super(message);
-  }
-}
-
-export class TimeoutError extends AppError {
-  readonly code = "TIMEOUT_ERROR";
-  readonly status = 408;
-  readonly userMessage = "Превышено время ожидания. Попробуйте снова.";
-
-  constructor(message: string = "Request timeout") {
-    super(message);
-  }
-}
-
-// Ошибки API
-export class ApiError extends AppError {
-  readonly userMessage: string;
+  public readonly code: string;
+  public readonly status: number;
+  public readonly userMessage: string;
+  public readonly field?: string;
   public readonly details?: unknown;
 
   constructor(
     message: string,
-    public readonly status: number,
-    public readonly code: string = "API_ERROR",
-    userMessage?: string,
-    details?: unknown,
-    field?: string // Добавляем field параметр
+    options: {
+      code: string;
+      status: number;
+      userMessage?: string;
+      field?: string;
+      details?: unknown;
+    }
   ) {
-    super(message, field); // Передаем field в родительский класс
-    this.userMessage = userMessage || this.getDefaultUserMessage(status);
-    this.details = details;
+    super(message);
+    this.name = this.constructor.name;
+    this.code = options.code;
+    this.status = options.status;
+    this.userMessage = options.userMessage || this.getDefaultUserMessage(options.status);
+    this.field = options.field;
+    this.details = options.details;
   }
 
   private getDefaultUserMessage(status: number): string {
     const messages: Record<number, string> = {
-      400: "Неверный запрос.",
-      401: "Требуется авторизация.",
-      403: "Доступ запрещен.",
-      404: "Ресурс не найден.",
-      409: "Конфликт данных.",
-      422: "Ошибка валидации.",
-      429: "Слишком много запросов.",
-      500: "Внутренняя ошибка сервера.",
-      502: "Проблемы с сервером.",
-      503: "Сервис временно недоступен.",
+      400: "Invalid request. Please check your input.",
+      401: "Authentication required. Please sign in.",
+      403: "You don't have permission to perform this action.",
+      404: "The requested resource was not found.",
+      409: "This resource already exists.",
+      422: "Validation failed. Please check your input.",
+      429: "Too many requests. Please try again later.",
+      500: "Internal server error. Please try again later.",
+      502: "Bad gateway. Please try again later.",
+      503: "Service unavailable. Please try again later.",
     };
-
-    return messages[status] || "Произошла ошибка. Попробуйте снова.";
+    return messages[status] || "An unexpected error occurred. Please try again.";
   }
 }
 
-// Ошибки валидации
+// Specific error types
+export class NetworkError extends AppError {
+  constructor(message: string = "Network error occurred") {
+    super(message, {
+      code: "NETWORK_ERROR",
+      status: 0,
+      userMessage: "Please check your internet connection and try again.",
+    });
+  }
+}
+
+export class TimeoutError extends AppError {
+  constructor(message: string = "Request timeout") {
+    super(message, {
+      code: "TIMEOUT_ERROR",
+      status: 408,
+      userMessage: "Request timed out. Please try again.",
+    });
+  }
+}
+
+export class ApiError extends AppError {
+  constructor(
+    message: string,
+    public readonly status: number,
+    code: string = "API_ERROR",
+    userMessage?: string,
+    details?: unknown,
+    field?: string
+  ) {
+    super(message, { code, status, userMessage, field, details });
+  }
+}
+
 export class ValidationError extends AppError {
-  readonly code = "VALIDATION_ERROR";
-  readonly status = 400;
-  readonly userMessage: string;
-
-  constructor(message: string, public readonly field?: string) {
-    super(message, field);
-    this.userMessage = field
-      ? `Ошибка в поле "${field}": ${message}`
-      : `Ошибка валидации: ${message}`;
+  constructor(message: string, field?: string) {
+    super(message, {
+      code: "VALIDATION_ERROR",
+      status: 400,
+      userMessage: field ? `Field "${field}": ${message}` : `Validation error: ${message}`,
+      field,
+    });
   }
 }
 
-// Type guards для безопасной проверки типов
+// Type guards with proper typing
 export function isAppError(error: unknown): error is AppError {
   return error instanceof AppError;
 }
@@ -104,118 +108,153 @@ export function isValidationError(error: unknown): error is ValidationError {
   return error instanceof ValidationError;
 }
 
-// Сначала определим интерфейс для ошибок API с дополнительными полями
+// Interface for API error responses
 interface ApiErrorResponse {
   message: string;
-  status?: number;
-  statusCode?: number;
   code?: string;
   userMessage?: string;
   details?: unknown;
   field?: string;
+  status?: number;
+  statusCode?: number;
 }
 
-// Type guard для проверки, что ошибка имеет структуру ApiErrorResponse
-function isApiErrorResponse(error: unknown): error is Error & ApiErrorResponse {
-  if (!(error instanceof Error)) {
+// Type guard for API error responses
+function isApiErrorResponse(error: unknown): error is ApiErrorResponse {
+  if (typeof error !== 'object' || error === null) {
     return false;
   }
 
-  // Безопасная проверка через временное приведение
-  const potentialApiError = error as Partial<ApiErrorResponse>;
-
-  return (
-    typeof potentialApiError.message === "string" &&
-    (typeof potentialApiError.status === "number" ||
-      typeof potentialApiError.statusCode === "number" ||
-      typeof potentialApiError.code === "string" ||
-      typeof potentialApiError.userMessage === "string")
-  );
+  const potentialError = error as Partial<ApiErrorResponse>;
+  return typeof potentialError.message === 'string';
 }
 
-// Обновленная функция toAppError
-export function toAppError(error: unknown): AppError {
-  if (isAppError(error)) {
-    return error;
+// Type guard for Error-like objects
+function isErrorLike(error: unknown): error is { message: string; name?: string } {
+  if (typeof error !== 'object' || error === null) {
+    return false;
   }
-
-  if (error instanceof Error) {
-    if (error.name === "AbortError") {
-      return new TimeoutError(error.message);
-    }
-
-    // Используем наш type guard
-    if (isApiErrorResponse(error)) {
-      const status = error.status || error.statusCode || 0;
-
-      return new ApiError(
-        error.message,
-        status,
-        error.code,
-        error.userMessage,
-        error.details,
-        error.field
-      );
-    }
-
-    // Безопасное извлечение свойств через проверку типа
-    if (typeof error === "object" && error !== null) {
-      // Корректное приведение типов через unknown
-      const errorObj = error as unknown as Record<string, unknown>;
-
-      const status =
-        getNumberProperty(errorObj, "status") ||
-        getNumberProperty(errorObj, "statusCode") ||
-        0;
-
-      const message =
-        getStringProperty(errorObj, "message") ||
-        getStringProperty(errorObj, "error") ||
-        error.message;
-
-      if (status > 0) {
-        return new ApiError(
-          message,
-          status,
-          getStringProperty(errorObj, "code"),
-          getStringProperty(errorObj, "userMessage"),
-          errorObj.details,
-          getStringProperty(errorObj, "field")
-        );
-      }
-    }
-
-    return new NetworkError(error.message);
-  }
-
-  // Обработка примитивных типов
-  if (typeof error === "string") {
-    return new NetworkError(error);
-  }
-
-  if (typeof error === "number") {
-    return new ApiError(`Error ${error}`, 0, "UNKNOWN_ERROR");
-  }
-
-  return new NetworkError("An unknown error occurred");
+  
+  const potentialError = error as { message: unknown };
+  return typeof potentialError.message === 'string';
 }
 
-// Улучшенные вспомогательные функции
-function getStringProperty(obj: unknown, prop: string): string | undefined {
-  if (typeof obj !== "object" || obj === null) return undefined;
-
+// Safe property access functions
+function getSafeStringProperty(obj: unknown, prop: string): string | undefined {
+  if (typeof obj !== 'object' || obj === null) return undefined;
+  
   const value = (obj as Record<string, unknown>)[prop];
-  return typeof value === "string" ? value : undefined;
+  return typeof value === 'string' ? value : undefined;
 }
 
-function getNumberProperty(obj: unknown, prop: string): number | undefined {
-  if (typeof obj !== "object" || obj === null) return undefined;
-
+function getSafeNumberProperty(obj: unknown, prop: string): number | undefined {
+  if (typeof obj !== 'object' || obj === null) return undefined;
+  
   const value = (obj as Record<string, unknown>)[prop];
-  if (typeof value === "number") return value;
-  if (typeof value === "string") {
+  if (typeof value === 'number') return value;
+  if (typeof value === 'string') {
     const num = Number(value);
     return isNaN(num) ? undefined : num;
   }
   return undefined;
+}
+
+function getSafeProperty(obj: unknown, prop: string): unknown {
+  if (typeof obj !== 'object' || obj === null) return undefined;
+  return (obj as Record<string, unknown>)[prop];
+}
+
+// Main error normalization function
+export function toAppError(error: unknown): AppError {
+  // If it's already an AppError, return as-is
+  if (isAppError(error)) {
+    return error;
+  }
+
+  // Handle native Error instances
+  if (error instanceof Error) {
+    // Handle specific error types
+    if (error.name === 'AbortError') {
+      return new TimeoutError(error.message);
+    }
+
+    // Check if it's a network error
+    if (error.message.includes('Failed to fetch') || 
+        error.message.includes('Network request failed') ||
+        error.name === 'TypeError' && error.message.includes('fetch')) {
+      return new NetworkError(error.message);
+    }
+
+    // Try to extract structured error information from the error object
+    const status = getSafeNumberProperty(error, 'status') || 
+                   getSafeNumberProperty(error, 'statusCode') || 0;
+    
+    const message = getSafeStringProperty(error, 'message') || 
+                    error.message;
+
+    if (status > 0) {
+      return new ApiError(
+        message,
+        status,
+        getSafeStringProperty(error, 'code'),
+        getSafeStringProperty(error, 'userMessage'),
+        getSafeProperty(error, 'details'),
+        getSafeStringProperty(error, 'field')
+      );
+    }
+
+    // Fallback to NetworkError for generic Errors
+    return new NetworkError(error.message);
+  }
+
+  // Handle API error responses (plain objects)
+  if (isApiErrorResponse(error)) {
+    const status = error.status || error.statusCode || 0;
+    return new ApiError(
+      error.message,
+      status,
+      error.code,
+      error.userMessage,
+      error.details,
+      error.field
+    );
+  }
+
+  // Handle string errors
+  if (typeof error === 'string') {
+    return new NetworkError(error);
+  }
+
+  // Handle numeric error codes
+  if (typeof error === 'number') {
+    return new ApiError(`Error ${error}`, error, 'UNKNOWN_ERROR');
+  }
+
+  // Handle Error-like objects that aren't Error instances
+  if (isErrorLike(error)) {
+    return new NetworkError(error.message);
+  }
+
+  // Final fallback
+  return new NetworkError('An unknown error occurred');
+}
+
+// Utility functions for common error scenarios
+export function createValidationError(message: string, field?: string): ValidationError {
+  return new ValidationError(message, field);
+}
+
+export function createApiError(
+  message: string, 
+  status: number, 
+  options?: { code?: string; userMessage?: string; details?: unknown; field?: string }
+): ApiError {
+  return new ApiError(
+    message,
+    status,
+    options?.code,
+    options?.userMessage,
+    options?.details,
+    options?.field
+  );
 }

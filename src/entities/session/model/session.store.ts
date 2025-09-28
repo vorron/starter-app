@@ -2,12 +2,12 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { User } from "@/entities/user/model/types";
 import { authApi } from "@/shared/api/endpoints/auth";
-import { AppError, toAppError } from "@/shared/lib/errors"; // Импортируем наши типы ошибок
+import { AppError, toAppError } from "@/shared/lib/errors";
 
 interface SessionState {
   user: User | null;
   isLoading: boolean;
-  error: AppError | null; // Меняем тип на AppError | null
+  error: AppError | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<void>;
@@ -21,25 +21,22 @@ export const useSessionStore = create<SessionState>()(
     (set) => ({
       user: null,
       isLoading: true,
-      error: null, // Начальное значение теперь совместимо с типом
+      error: null,
 
       login: async (email: string, password: string) => {
         set({ isLoading: true, error: null });
-
         try {
           const userData = await authApi.login({ email, password });
           set({ user: userData, isLoading: false, error: null });
         } catch (error) {
-          const appError = toAppError(error); // Конвертируем в AppError
-          set({ isLoading: false, error: appError }); // Теперь тип совпадает
+          const appError = toAppError(error);
+          set({ isLoading: false, error: appError });
           throw appError;
         }
       },
 
-      // Аналогичные исправления для register и checkAuth
       register: async (email: string, password: string, name: string) => {
         set({ isLoading: true, error: null });
-
         try {
           const userData = await authApi.register({ email, password, name });
           set({ user: userData, isLoading: false, error: null });
@@ -69,26 +66,22 @@ export const useSessionStore = create<SessionState>()(
       },
 
       clearError: () => set({ error: null }),
-
-      updateUser: (userData) =>
-        set((state) => ({
-          user: state.user ? { ...state.user, ...userData } : null,
-        })),
+      
+      updateUser: (userData) => set((state) => ({
+        user: state.user ? { ...state.user, ...userData } : null,
+      })),
     }),
-    {
-      name: "session-store",
-    }
+    { name: "session-store" }
   )
 );
 
 export const useUser = () => useSessionStore((state) => state.user);
 export const useAuthLoading = () => useSessionStore((state) => state.isLoading);
 export const useAuthError = () => useSessionStore((state) => state.error);
-export const useAuthActions = () =>
-  useSessionStore((state) => ({
-    login: state.login,
-    logout: state.logout,
-    register: state.register,
-    checkAuth: state.checkAuth,
-    clearError: state.clearError,
-  }));
+export const useAuthActions = () => useSessionStore((state) => ({
+  login: state.login,
+  logout: state.logout,
+  register: state.register,
+  checkAuth: state.checkAuth,
+  clearError: state.clearError,
+}));

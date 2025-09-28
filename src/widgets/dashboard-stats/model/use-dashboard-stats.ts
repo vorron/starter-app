@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { apiClient } from '@/shared/api/client'
 import { AppError, toAppError } from '@/shared/lib/errors'
 
 interface DashboardStats {
@@ -7,11 +6,6 @@ interface DashboardStats {
   completedTasks: number
   pendingTasks: number
   productivity: number
-  recentActivity: {
-    action: string
-    project: string
-    time: string
-  }[]
 }
 
 export function useDashboardStats() {
@@ -26,9 +20,20 @@ export function useDashboardStats() {
       try {
         setIsLoading(true)
         setError(null)
-        const stats = await apiClient.get<DashboardStats>('/dashboard/stats')
+        
+        // Mock data for template - replace with actual API call
+        const mockStats: DashboardStats = {
+          totalProjects: 12,
+          completedTasks: 124,
+          pendingTasks: 8,
+          productivity: 85,
+        }
+        
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 500))
+        
         if (mounted) {
-          setData(stats)
+          setData(mockStats)
         }
       } catch (err) {
         if (mounted) {
