@@ -4,13 +4,9 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
-import {
-  useAuthActions,
-  useAuthError,
-  useAuthLoading,
-} from '@/entities/session/model/session.store';
-import { emailValidator } from '@/shared/lib/validators';
-import { passwordValidator } from '@/shared/lib/validators';
+import { useAuthError, useAuthLoading, useRegister } from '@/entities/session/model/session.store';
+import { emailValidator } from '@/shared/lib/utils/validators';
+import { passwordValidator } from '@/shared/lib/utils/validators';
 
 export function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -21,7 +17,7 @@ export function RegisterForm() {
   });
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
-  const { register } = useAuthActions();
+  const register = useRegister();
   const error = useAuthError();
   const isLoading = useAuthLoading();
   const router = useRouter();

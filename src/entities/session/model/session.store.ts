@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { User } from '@/entities/user/model/types';
-import { authApi } from '@/shared/api/endpoints/auth';
 import { AppError, toAppError } from '@/shared/lib/errors';
+import { authApi } from '@/shared/api/endpoints/auth';
 
 interface SessionState {
   user: User | null;
@@ -83,12 +83,9 @@ export const useSessionStore = create<SessionState>()(
 export const useUser = () => useSessionStore((state) => state.user);
 export const useAuthLoading = () => useSessionStore((state) => state.isLoading);
 export const useAuthError = () => useSessionStore((state) => state.error);
-export const useAuthActions = () =>
-  useSessionStore((state) => ({
-    login: state.login,
-    logout: state.logout,
-    register: state.register,
-    checkAuth: state.checkAuth,
-    clearError: state.clearError,
-    forceLogout: state.clearError,
-  }));
+export const useLogin = () => useSessionStore((state) => state.login);
+export const useLogout = () => useSessionStore((state) => state.logout);
+export const useRegister = () => useSessionStore((state) => state.register);
+export const useCheckAuth = () => useSessionStore((state) => state.checkAuth);
+export const useClearError = () => useSessionStore((state) => state.clearError);
+export const useForceLogout = () => useSessionStore((state) => state.forceLogout);

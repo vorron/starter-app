@@ -6,23 +6,8 @@ declare module '@tanstack/react-query' {
   }
 }
 
-// Вместо расширения интерфейсов, используем intersection types
-export type QueryMetaWithErrorConfig = {
-  errorConfig?: QueryErrorConfig;
-};
-
-export interface QueryErrorConfig {
-  showToast?: boolean;
-  toastDuration?: number;
-  fallbackMessage?: string;
-}
-
-export type DefaultErrorConfig = Required<QueryErrorConfig>;
-
-export function getQueryErrorMessage(
-  error: unknown,
-  fallbackMessage: string = 'Произошла неизвестная ошибка'
-): string {
+// Утилиты для работы с ошибками запросов
+export function getQueryErrorMessage(error: unknown): string {
   if (error instanceof AppError) {
     return error.userMessage;
   }
@@ -31,12 +16,9 @@ export function getQueryErrorMessage(
     return error.message;
   }
 
-  return fallbackMessage;
+  return 'An unknown error occurred';
 }
 
-export const createErrorConfig = (config: QueryErrorConfig = {}): DefaultErrorConfig => ({
-  showToast: true,
-  toastDuration: 5000,
-  fallbackMessage: 'Что-то пошло не так',
-  ...config,
-});
+export function isQueryError(error: unknown): error is AppError {
+  return error instanceof AppError;
+}

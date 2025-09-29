@@ -42,7 +42,6 @@ export class AppError extends Error {
   }
 }
 
-// Specific error types
 export class NetworkError extends AppError {
   constructor(message: string = 'Network error occurred') {
     super(message, {
@@ -87,6 +86,16 @@ export class ValidationError extends AppError {
   }
 }
 
+export class UnauthorizedError extends AppError {
+  constructor(message: string = 'Authentication required') {
+    super(message, {
+      code: 'UNAUTHORIZED',
+      status: 401,
+      userMessage: 'Your session has expired. Please sign in again.',
+    });
+  }
+}
+
 // Type guards with proper typing
 export function isAppError(error: unknown): error is AppError {
   return error instanceof AppError;
@@ -108,6 +117,10 @@ export function isValidationError(error: unknown): error is ValidationError {
   return error instanceof ValidationError;
 }
 
+export function isUnauthorizedError(error: unknown): error is UnauthorizedError {
+  return error instanceof UnauthorizedError;
+}
+
 // Interface for API error responses
 interface ApiErrorResponse {
   message: string;
@@ -119,7 +132,6 @@ interface ApiErrorResponse {
   statusCode?: number;
 }
 
-// Type guard for API error responses
 function isApiErrorResponse(error: unknown): error is ApiErrorResponse {
   if (typeof error !== 'object' || error === null) {
     return false;
@@ -129,7 +141,6 @@ function isApiErrorResponse(error: unknown): error is ApiErrorResponse {
   return typeof potentialError.message === 'string';
 }
 
-// Type guard for Error-like objects
 function isErrorLike(error: unknown): error is { message: string; name?: string } {
   if (typeof error !== 'object' || error === null) {
     return false;
@@ -139,7 +150,6 @@ function isErrorLike(error: unknown): error is { message: string; name?: string 
   return typeof potentialError.message === 'string';
 }
 
-// Safe property access functions
 function getSafeStringProperty(obj: unknown, prop: string): string | undefined {
   if (typeof obj !== 'object' || obj === null) return undefined;
 

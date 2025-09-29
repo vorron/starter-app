@@ -1,4 +1,4 @@
-import { ApiError, toAppError, isApiError } from '@/shared/lib/errors';
+import { ApiError, toAppError, isApiError, UnauthorizedError } from '@/shared/lib/errors';
 import { config } from '@/shared/lib/config';
 import { authApi } from './endpoints/auth';
 
@@ -26,6 +26,7 @@ class ApiClient {
   private config: ApiClientConfig;
   private isRefreshing = false;
   private refreshSubscribers: ((token: string | null) => void)[] = [];
+  private refreshPromise: Promise<string> | null = null;
 
   constructor(customConfig?: Partial<ApiClientConfig>) {
     this.config = {
@@ -65,6 +66,7 @@ class ApiClient {
           'Content-Type': 'application/json',
           ...fetchOptions.headers,
         },
+        credentials: 'include', // Для httpOnly cookies
       };
 
       if (body) {
@@ -76,12 +78,7 @@ class ApiClient {
 
       if (!response.ok) {
         // Handle 401 errors with token refresh
-        if (
-          response.status === 401 &&
-          endpoint !== '/auth/refresh' &&
-          retryCount === 0 &&
-          !this.isRefreshing
-        ) {
+        if (response.status === 401 && endpoint !== '/auth/refresh' && retryCount === 0) {
           try {
             await this.handleAuthError(options);
             // Retry the original request with new token
@@ -144,29 +141,40 @@ class ApiClient {
             };
             resolve();
           } else {
-            reject(new ApiError('Authentication failed', 401, 'AUTH_FAILED'));
+            reject(new UnauthorizedError('Token refresh failed'));
           }
         });
       });
     }
 
     this.isRefreshing = true;
+    this.refreshPromise = this.performTokenRefresh();
 
     try {
-      const { accessToken } = await authApi.refreshToken();
-      this.notifyRefreshSubscribers(accessToken);
+      const newToken = await this.refreshPromise;
+      this.notifyRefreshSubscribers(newToken);
 
-      // Update the original request with new token
       originalRequest.headers = {
         ...originalRequest.headers,
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${newToken}`,
       };
     } catch (error) {
       this.notifyRefreshSubscribers(null);
+      this.triggerGlobalLogout();
       throw error;
     } finally {
       this.isRefreshing = false;
+      this.refreshPromise = null;
       this.refreshSubscribers = [];
+    }
+  }
+
+  private async performTokenRefresh(): Promise<string> {
+    try {
+      const { accessToken } = await authApi.refreshToken();
+      return accessToken;
+    } catch {
+      throw new UnauthorizedError('Failed to refresh token');
     }
   }
 

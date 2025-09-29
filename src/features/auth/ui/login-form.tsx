@@ -4,17 +4,13 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
-import {
-  useAuthActions,
-  useAuthError,
-  useAuthLoading,
-} from '@/entities/session/model/session.store';
+import { useAuthError, useAuthLoading, useLogin } from '@/entities/session/model/session.store';
 
 export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { login } = useAuthActions();
+  const login = useLogin();
   const error = useAuthError();
   const isLoading = useAuthLoading();
   const router = useRouter();

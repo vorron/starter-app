@@ -1,5 +1,5 @@
-import { apiClient } from '../client';
 import { User } from '@/entities/user/model/types';
+import { apiClient } from '../client';
 
 export interface LoginRequest {
   email: string;

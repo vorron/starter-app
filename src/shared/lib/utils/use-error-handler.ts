@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { AppError, toAppError, isApiError } from './errors';
+import { AppError, toAppError, isApiError } from '../errors';
 
 interface UseErrorHandlerReturn {
   error: AppError | null;
