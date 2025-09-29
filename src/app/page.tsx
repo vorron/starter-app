@@ -1,9 +1,10 @@
 // app/page.tsx (упрощенный вариант)
 
-import { useAuthLoading } from '@/entities/session/model/session.store';
 import { serverRedirect, ROUTES } from '@/shared/routing';
+import { getServerSession } from '@/shared/session';
 
 export default async function HomePage() {
-    const isLoading = useAuthLoading();
-  serverRedirect(isLoading ? ROUTES.PROTECTED.DASHBOARD : ROUTES.PUBLIC.LOGIN);
+  const session = await getServerSession();
+  serverRedirect(session?.user ? ROUTES.PROTECTED.DASHBOARD : ROUTES.PUBLIC.LOGIN);
 }
+
