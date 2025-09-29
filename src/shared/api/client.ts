@@ -1,5 +1,5 @@
 import { ApiError, toAppError, isApiError, UnauthorizedError } from '@/shared/lib/errors';
-import { config } from '@/shared/lib/config';
+import { config } from '@/shared/config';
 import { authApi } from './endpoints/auth';
 
 export interface RequestOptions extends Omit<RequestInit, 'body'> {

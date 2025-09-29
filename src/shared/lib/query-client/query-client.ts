@@ -1,5 +1,5 @@
 import { QueryClient, QueryCache, MutationCache } from '@tanstack/react-query';
-import { config } from '../config';
+import { config } from '../../config';
 import { toAppError, isApiError, isUnauthorizedError } from '../errors';
 
 export const createQueryClient = () => {

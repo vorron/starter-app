@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { config } from '../config';
+import { config } from '../../config';
 import { createQueryClient } from './query-client';
 
 interface QueryProviderProps {

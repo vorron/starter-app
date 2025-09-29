@@ -7,7 +7,7 @@ import { useCheckAuth } from '@/entities/session/model/session.store';
 import { ThemeProvider } from '../ui/theme-provider';
 import { useSessionEvents } from '@/entities/session/model/useSessionEvents';
 import { setupAuthEventListeners } from './auth/events';
-import { config } from './config';
+import { config } from '../config';
 import { createQueryClient } from './query-client/query-client';
 
 const QueryProvider = ({ children }: { children: React.ReactNode }) => {
