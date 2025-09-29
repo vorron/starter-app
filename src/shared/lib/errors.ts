@@ -1,5 +1,5 @@
 // Base error class with proper typing
-export abstract class AppError extends Error {
+export class AppError extends Error {
   public readonly code: string;
   public readonly status: number;
   public readonly userMessage: string;

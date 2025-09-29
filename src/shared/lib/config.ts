@@ -6,6 +6,9 @@ const envSchema = z.object({
   NEXT_PUBLIC_API_RETRIES: z.string().transform(Number).default(2),
   NEXT_PUBLIC_API_TIMEOUT: z.string().transform(Number).default(10000),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+  QUERY_STALE_TIME: z.string().transform(Number).default(5),
+  MAX_QUERY_RETRIES: z.string().transform(Number).default(2),
+  MAX_MUTATION_RETRIES: z.string().transform(Number).default(1),
 });
 
 class AppConfig {
@@ -41,6 +44,15 @@ class AppConfig {
   }
   get isTest() {
     return this.env.NODE_ENV === 'test';
+  }
+  get queryStaleTime() {
+    return this.env.QUERY_STALE_TIME * 60 * 1000;
+  }
+  get maxQueryRetries() {
+    return this.env.MAX_QUERY_RETRIES;
+  }
+  get maxMutationRetries() {
+    return this.env.MAX_MUTATION_RETRIES;
   }
 }
 

@@ -17,9 +17,10 @@ export function useErrorHandler(): UseErrorHandlerReturn {
     const appError = toAppError(error);
     setError(appError);
 
-    // Дополнительная логика обработки (тосты, логирование и т.д.)
+    // Дополнительная логика обработки
     if (isApiError(appError) && appError.status === 401) {
       // Логика логаута будет в session store
+      console.warn('Authentication error, redirecting to login...');
     }
   }, []);
 
@@ -30,7 +31,7 @@ export function useErrorHandler(): UseErrorHandlerReturn {
         return await promise;
       } catch (error) {
         handleError(error);
-        throw error;
+        throw error; // Пробрасываем ошибку дальше для React Query
       }
     },
     [clearError, handleError]
