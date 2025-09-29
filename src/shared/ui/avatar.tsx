@@ -4,9 +4,6 @@ import * as React from 'react';
 import Image, { type StaticImageData } from 'next/image';
 import { cn } from '@/shared/lib/cn';
 
-// Добавляем fallback изображение (можно создать или использовать data URL)
-const DEFAULT_AVATAR = '/images/avatar-placeholder.png';
-
 const Avatar = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
@@ -23,19 +20,28 @@ interface AvatarImageProps extends Omit<React.ComponentProps<typeof Image>, 'src
   alt: string;
 }
 
+// src/shared/ui/avatar.tsx - улучшенная обработка изображений
 const AvatarImage = React.forwardRef<HTMLImageElement, AvatarImageProps>(
   ({ className, alt, src, ...props }, ref) => {
-    // Используем fallback если src не предоставлен
-    const imageSrc = src || DEFAULT_AVATAR;
+    const [imageError, setImageError] = React.useState(false);
+
+    const handleError = () => {
+      setImageError(true);
+    };
+
+    if (!src || imageError) {
+      return null; // Показываем только fallback
+    }
 
     return (
       <Image
         ref={ref}
         className={cn('aspect-square h-full w-full', className)}
         alt={alt}
-        src={imageSrc}
+        src={src}
         fill
         style={{ objectFit: 'cover' }}
+        onError={handleError}
         {...props}
       />
     );
