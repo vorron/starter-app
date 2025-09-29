@@ -96,6 +96,11 @@ export class UnauthorizedError extends AppError {
   }
 }
 
+// Добавляем тип guard для Next.js ошибок
+export function isNextError(error: unknown): error is Error & { digest?: string } {
+  return error instanceof Error && 'digest' in error;
+}
+
 // Type guards with proper typing
 export function isAppError(error: unknown): error is AppError {
   return error instanceof AppError;
@@ -179,6 +184,16 @@ export function toAppError(error: unknown): AppError {
   // If it's already an AppError, return as-is
   if (isAppError(error)) {
     return error;
+  }
+
+  if (isNextError(error)) {
+    if (error.message.includes('NEXT_NOT_FOUND')) {
+      return new AppError('Page not found', {
+        code: 'NOT_FOUND',
+        status: 404,
+        userMessage: 'The requested page was not found',
+      });
+    }
   }
 
   // Handle native Error instances

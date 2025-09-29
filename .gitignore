@@ -42,5 +42,5 @@ next-env.d.ts
 
 ds.txt
 
-/src/shared/ui
-/widgets
+#/src/shared/ui
+#/widgets

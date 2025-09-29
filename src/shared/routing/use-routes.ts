@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, usePathname } from 'next/navigation';
-import { ROUTES} from './routes';
+import { ROUTES } from './routes';
 import { AppRoute } from './router-utils';
 
 export const useAppRouter = () => {
